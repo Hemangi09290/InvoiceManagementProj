@@ -1,0 +1,264 @@
+{% extends "main_base.html" %}
+
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+{% block content %}
+
+<script src="{% static 'js/formset.js' %}"></script>
+<script src="{% static 'js/formset_address.js' %}"></script>
+    <script src="{% static 'js/form_validation.js' %}"></script>
+ <script>
+         $(function() {
+            $( "#id_agreement_date" ).datepicker();
+         });
+      </script>
+  <form id="msform" method="POST" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+   <a class="btn btn-primary btn-rounded float-right" href="{% url "client-list" %}" role="button">Back To List</a>
+
+    <br> <br>
+    
+    <div class="row">
+        {% csrf_token %}
+      <div class="col-md-12 custom-tabs">
+        <nav>
+          <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <a class="nav-item_ nav-link active" id="nav-home-tab" data-toggle="" href="#nav-basic" role="tab" aria-controls="nav-home" aria-selected="true">
+                Basic Information
+              </a>
+              <a class="nav-item_ nav-link" id="nav-profile-tab" data-toggle="" href="#nav-additional" role="tab" aria-controls="nav-profile" aria-selected="false">
+                Aditional Information
+              </a>
+            </div>
+        </nav>
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-home-tab"> 
+           {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% if form2.errors %}
+                            {% for field in form2 %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+
+            <div class="row">
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+               <!--  <input type="file" name="logo" accept="image/*" id="id_logo"> -->
+              
+                 {%  if is_edit %}
+            {% if client.logo %}
+            <img src="{{ client.logo.url }}" class="rounded" width="40px;"  height="40px;">
+                {% endif %}
+                 {{form.logo}} 
+                          
+                      {% else %}
+                     <label style=" font-style: monospace; opacity: 0.7;"> Add Client Logo </label>
+                     {{form.logo}}
+
+                    {% endif %}
+                
+
+
+
+              </div>
+                
+            </div>
+            <div class="row">
+                <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                  <!-- <input class="form-control" placeholder="Enter Client name *" type="text" name="client_name" maxlength="50" required="" id="id_client_name" value=""> -->
+                    <label style=" font-style: monospace; opacity: 0.7;"> Enter Client Name* </label>
+                  {{form.name}}
+                </div>
+                <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                  <!-- <input class="form-control" placeholder="Wesite *" type="text" name="website" maxlength="50" required="" id="id_website" value=""> -->
+                   <label style=" font-style: monospace; opacity: 0.7;"> Website </label>
+                  {{form.website}}
+                </div>
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                  <!-- <input class="form-control" placeholder="Wesite *" type="text" name="website" maxlength="50" required="" id="id_website" value=""> -->
+                  <label style=" font-style: monospace; opacity: 0.7;"> Phone No </label>
+                  {{form.phone_no}}
+                </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                <!-- <input class="form-control" placeholder="Wesite *" type="text" name="website" maxlength="50" required="" id="id_website" value=""> -->
+                 <label style=" font-style: monospace; opacity: 0.7;"> Email Id  </label>
+                {{form.email_id}}
+              </div>
+            </div>
+            {{ form2.management_form }}
+            {% for form1 in form2 %}
+              
+              <div class="address-row">
+                <div class="row">
+                  <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                    <label style=" font-style: monospace; opacity: 0.7;"> Zip Code </label>
+                    {{form1.zip_code}}
+                     {{form1.id}}
+                  </div>
+                  <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                    <label style=" font-style: monospace; opacity: 0.7;"> Client Address* </label>
+                    {{form1.address}}
+                  </div>
+                  <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                      <label style=" font-style: monospace; opacity: 0.7;"> Street </label>
+                    {{form1.street}}
+                  </div>
+                </div>
+
+
+                <div class="row">
+                  <div class="form-group col-xl-4 col-md-4 col-lg-4 input-group-append">
+                    {%  if is_edit %}
+                      <button class="btn btn-danger btn-rounded remove-address"> Remove</button>
+                    {% else %}
+                      <button class="btn btn-primary btn-rounded add-address">Add Another Address (*)</button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+            {% endfor %}
+             {%  if is_edit %}
+                     
+                      <button class="btn btn-primary btn-rounded add-address">Add Another Address (*)</button>
+                    {% endif %}
+            <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "client-list" %}" role="button">Cancel</a> 
+            <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next" value="Next" type="button">Next</button>
+
+          </div>
+          <div class="tab-pane fade " id="nav-additional" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="page-header">
+              <h1 class="page-title"></h1>
+                {{ form.media }}
+            </div>
+
+            <div class="row">
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                <!-- <input class="form-control" placeholder="Client PAN No. *" type="text" name="pan" maxlength="50" required="" id="id_pan" value=""> -->
+                 <label style=" font-style: monospace; opacity: 0.7;"> Client Pan No </label>
+                {{form.pan}}
+              </div>
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+               <!--  <input class="form-control" placeholder="GSTN *" type="text" name="gstn" maxlength="50" required="" id="id_gstn" value=""> -->
+                <label style=" font-style: monospace; opacity: 0.7;"> Gstn </label>
+                {{form.gstn}}
+              </div>
+              <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                <!-- <input class="form-control" placeholder="IEC" type="text" name="iec" maxlength="50" id="id_iec" value=""> -->
+                  <label style=" font-style: monospace; opacity: 0.7;"> Iec </label>
+                 {{form.iec}}
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="form-group col-xl-6 col-md-6 col-lg-6">
+                <!-- <select class="form-control" name="project" id="id_project">
+                  <option value="" selected="selected">Project name</option>
+                </select> -->
+
+                <label style=" font-style: monospace; opacity: 0.7;"> Project </label>
+
+                {{form.project}}
+
+              </div>
+              <div class="form-group col-xl-6 col-md-6 col-lg-6">
+                <label style=" font-style: monospace; opacity: 0.7;"> Project Type</label>
+                  {{form.project_type}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-xl-2 col-md-2 col-lg-2">
+               <!--  <textarea class="form-control" rows="3" id="id_agreement_detail" name="agreement_detail" placeholder="Agreement details" value=""></textarea> -->
+               <!--  {{form.agreement_detail.label}}: -->
+                <label style=" font-style: monospace; opacity: 0.7;"> Agreement Detail </label>
+             
+               
+              </div>
+                <div class="form-group col-xl-10 col-md-10 col-lg-10">
+               <!--  <textarea class="form-control" rows="3" id="id_agreement_detail" name="agreement_detail" placeholder="Agreement details" value=""></textarea> -->
+
+                {{form.agreement_detail}} 
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-xl-6 col-md-6 col-lg-6">
+               <!--  <input class="form-control" placeholder="Agreement Date" type="date" name="agreement_date" id="id_agreement_date" value=""> -->
+                  <label style=" font-style: monospace; opacity: 0.7;"> Agreement Date </label>
+                      {{form.agreement_date}}
+              </div>
+              <div class="form-group col-xl-6 col-md-6 col-lg-6">
+
+                 <label style=" font-style: monospace; opacity: 0.7;"> Upload Copy Of Agreement </label>
+                  {% if is_edit %}
+                   <a href="{{ agreement }}">{{ form.agreement.value }}</a>
+
+                  {% endif %}
+                  {{form.agreement}}
+              </div>
+            </div>
+            <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "client-list" %}" role="button">Cancel</a>
+            <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next" value="Next" type="button">Submit</button>
+            <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous" value="Previous" type="button">Previous</button>
+            
+              
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    // Disable form submissions if there are invalid fields
+    $(function() {
+      'use strict';
+      $(".previous").click(function (e) {
+                var previous = $('#nav-tab a.active').prev()
+                previous.length ?
+                    $(previous).tab('show'):
+                    $('#nav-tab a')[0].click();
+            });
+      $(".next").click(function(e){
+        $("#msform").trigger('submit');
+      });
+
+      $("#msform").submit(function(e){
+        e.preventDefault();
+      }).validate({
+        submitHandler: function(form) {
+        var next = $('#nav-tab a.active').next()
+          next.length?
+          $(next).tab('show'):
+          form.submit();
+        }
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "main_base.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
+
+{% endblock %}
+{% block content %}
+<form id="msform" method="post" enctype="multipart/form-data">
+	<!-- progressbar -->
+	<ul id="progressbar">
+		<li class="{% if step == 1 %} active{% endif %}"></li>
+		<li class="{% if step == 2 %} active{% endif %}"></li>
+        <li class="{%if page_name == 'home'%}active{% endif %}">
+
+	</ul>
+	<!-- fieldsets -->
+
+	<fieldset style="{% if step == 1 %} display: block; {% else %} display: none; {% endif %}">
+    {% csrf_token %}
+   	    <table>
+        {{ form }}
+        </table>
+        <input type="submit" name="next" class="next action-button" value="Next" />
+	</fieldset>
+	<fieldset style="{% if step == 2 %} display: block; {% else %} display: none; {% endif %}">
+    <div style="text-align: justify; text-align-last: left;">
+        Particulars/Item:
+    </div>
+    <div style="text-align: justify; text-align-last: right;">
+        <a class="btn btn-success" href="{% url 'particulars'%}?next={{ request.path|urlencode }}?step=2">Create particular</a>
+    </div>
+    <table class="table table-striped">
+    <tr>
+         <th>Item Name</th>
+         <th>Quantity</th>
+         <th>Amount</th>
+    </tr>
+    {% for particular in particulars %}
+        <tr>
+            <td>{{ particular.resource_type.resource_type_name }}</td>
+            <td>{{ particular.quantity }}</td>
+            <td>{{ particular.amount }}</td>
+            <td><a class="btn btn-warning" href="{% url 'particulars-update' particular.pk %}?next={{ request.path|urlencode }}?step=2">edit</a> |
+                <a class="btn btn-danger" href="{% url 'particulars-delete' particular.pk %}?next={{ request.path|urlencode }}?step=2">delete</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+		<input type="button" name="previous" class="previous action-button" value="Previous" />
+		<input type="submit" name="Submit" class="next action-button" value="Submit" />
+	</fieldset>
+
+</form>
+{% endblock %}

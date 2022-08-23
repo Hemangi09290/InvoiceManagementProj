@@ -1,0 +1,1217 @@
+{% extends "main_base.html" %}
+
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+{
+{% block content %}
+    <script  src="{% static 'js/bind.js' %}"></script>
+    <script  src="{% static 'js/formset.js' %}"></script>
+    <script  src="{% static 'js/calculations.js' %}"></script>
+    <script  src="{% static 'js/preview.js' %}"></script>
+    <style type="text/css">
+
+        .content {
+            max-width: 1366px;
+            max-height: 2136px;
+            background: #FFFFFF;
+            margin: auto;
+        }
+
+        .basic-font {
+            font-family: sans-serif;
+            font-style: normal;
+            font-size: 14px;
+            line-height: 28px;
+            color: #424141;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .basic-border {
+            border: 1px solid #CFD7DD;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #CFD7DD;
+        }
+
+        .footer-hr {
+            width: 100%;
+            height: 6px !important;
+            text-align: left;
+            opacity: 1;
+        }
+
+        .first-box {
+            max-width: 1265px;
+            max-height: 300px;
+            background: rgb(249 245 237 / 50%);
+            border: 1px solid #DED9CC;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        .second-box {
+            max-width: 1265px;
+            max-height: 430px;
+            background: rgb(249 245 237 / 50%);
+            border: 1px solid #DED9CC;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        .third-box {
+            max-width: 1265px;
+            max-height: 257px;
+            background: #FBFBFC;
+            border: 1px solid #CFD7DD;
+            box-sizing: border-box;
+        }
+
+        .fourth-box {
+            max-width: 1265px;
+            max-height: 323px;
+            background: #FBFBFC;
+            border: 1px solid #CFD7DD;
+            box-sizing: border-box;
+        }
+
+        .temp2 .first-box {
+            background: #fff;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            border-radius: 0px;
+        }
+
+    </style>
+    <script>
+        $(function () {
+            $("#id_agreement_date").datepicker();
+        });
+    </script>
+    <form id="msform" method="POST" enctype="multipart/form-data" action="">
+
+        <a class="btn btn-primary btn-rounded float-right" href="{% url "invoice-list" %}" role="button">Back To
+            List</a>
+
+        <br> <br>
+
+        <div class="row">
+            {% csrf_token %}
+            <div class="col-md-12 custom-tabs">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item_ nav-link active" id="nav-home-tab" data-toggle="" href="#nav-invoice"
+                           role="tab" aria-controls="nav-home" aria-selected="true">
+                            Invoice Information
+                        </a>
+                        <a class="nav-item_ nav-link" id="nav-profile-tab" data-toggle="" href="#nav-item" role="tab"
+                           aria-controls="nav-profile" aria-selected="false">
+                            Particular / Item
+                        </a>
+                        <a class="nav-item_ nav-link" id="nav-preview-tab" data-toggle="" href="#nav-preview"
+                           role="tab" aria-controls="nav-profile" aria-selected="false" target="_blank">
+                            Preview Invoice
+                        </a>
+                    </div>
+                </nav>
+                <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-invoice" role="tabpanel"
+                         aria-labelledby="nav-home-tab">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="page-header mb-4">
+                                    <img src="/static/img/logo.png" class="rounded" width="140"/>
+                                    <span class="ml-3"></span>
+                                    <div class="float-right">
+                                        {% if is_edit %}
+                                            {{ form.invoice_number }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Company </label>
+
+                                       {% if is_edit %}
+                                        {{ form.company }}
+                                        {% else %}
+                                           <select id="id_company" name="company" class="form-control">
+                                        {% for company in companies %}
+                                            <option value="{{company.id}}"
+                                                   {% if company == selected_companies %} selected="selected"{% endif %}>
+                                                   {{company.name|capfirst}}
+                                               </option>
+                                           {% endfor %}
+                                           </select>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                        <label style=" font-style: monospace; opacity: 0.7;"> Select Company Address</label>
+                                        {{ form.from_address }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Enter Name Of Person </label>
+                                        {{ form.name_of_person }}
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Bank* </label>
+                                        {{ form.company_bank }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="page-header mb-4">
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Client </label>
+                                        {{ form.client }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Client Address </label>
+                                        {{ form.to_address }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Agreement Date </label>
+                                        {{ form.agreement_date }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "invoice-list" %}"
+                           role="button">Cancel</a>
+                        <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
+                                value="Next" type="button">Next
+                        </button>
+                    </div>
+
+                    <div class="tab-pane fade " id="nav-item" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="card">
+                            <div class="card-body">
+                                {{ pform.management_form }}
+                                {{ fixed_p_form.management_form }}
+                                <div class="row">
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Currency* </label>
+                                        {{ currency_form.currency }}
+                                        <span id="currency_sub_unit" hidden>{{ currency_sub_unit }}</span>
+                                        <span id="currency_unit" hidden>{{ currency_unit }}</span>
+                                    </div>
+
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Invoice Type* </label>
+                                        {{ form.project_type }}
+                                    </div>
+                                    <div id="div_exchange_rate" style="{% if currency_name == 'INR' %}display: none;{% endif %}" class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Enter Exchange Rate* </label>
+                                        {{ currency_form.exchange_rate }}
+                                    </div>
+                                </div>
+                               
+                                <table style="{% if form.project_type.value == 'hourly' or  form.project_type.value != 'fixed price' %}display:table;{% else %} display: none;{% endif %}" class="table table-bordered" id="project_table">
+                                    <thead>
+                                    <tr class="table_hd">
+                                        <th width="40%">Item / Particulars</th>
+                                        <th width="20%">Unit rate</th>
+                                        <th width="20%">Amount in (<span id="id_currency_type">{{ currency_name|default_if_none:"" }}</span>)</th>
+                                        <th width="20%">QTY (hours)</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    {% for particular in pform %}
+
+                                        <tr class="duplicate-row">
+                                            <td>{{ particular.resource_type }} {{ particular.id }}</td>
+                                            <td>{{ particular.unit_rate }}</td>
+                                            <td>{{ particular.amount }}</td>
+                                            <td>{{ particular.quantity }}</td>
+                                            <td>
+                                                {% if is_edit %}
+                                                    <button class="btn btn-primary btn-rounded float-right remove-form-row"
+                                                            type="button">Remove
+                                                    </button>
+                                                {% else %}
+                                                    <button class="btn btn-primary btn-rounded float-right add-form-row"
+                                                            type="button">Add Another Row (*)
+                                                    </button>
+                                                {% endif %}
+                                        </tr>
+                                        {% if is_edit and forloop.last %}
+                                            <tr>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;">
+                                                    <button class="btn btn-primary btn-rounded add-form-row float-right">
+                                                        Add
+                                                        Another Row (*)
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                    <tfoot>
+                                     <tr id="tax-row" style="{% if currency_name != 'INR' %}display: none;{% endif %}">
+                                        <td>Taxes</td>
+
+                                        <td colspan="1" style="padding-left: 34px; " id="total_sgst_rate"> <label for="id_sgst">SGST: </label> {{ form.sgst }}</td>
+                                        <td colspan="1"><label for="id_cgst">CGST: </label>{{ form.cgst }}</td>
+                                        <td colspan="1"><label for="id_igst">IGST: </label> {{ form.igst }}</td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>In total</td>
+
+                                        <td style="padding-left: 34px; " id="total_unit_rate">{{ context.total_unit_rates }}</td>
+                                        <td colspan="1"><input type="text" id="total_amount" name="total_amount"
+                                                               value="{{ context.total_amount }}" readonly class="form-control"></td>
+                                        <td colspan="2" style="padding-left: 34px; " id="total_hours">{{ context.total_hours }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>In words</td>
+                                        <td colspan="4" id="in_words">{{ context.amount_in_words }}</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+
+                                <table style="{% if form.project_type.value == 'fixed price' %}display:block;{% else %} display: none;{% endif %}" class="table table-bordered" id="project_table_fixed">
+                                    <thead>
+                                    <tr class="table_hd">
+                                        <th width="40%">Particulars</th>
+                                        <th width="20%">QTY as per Project Work</th>
+                                        <th width="20%">Unit rate</th>
+                                        <th width="20%">Amount in (<span id="id_fixed_currency_type">{{ currency_name|default_if_none:"" }}</span>)</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    {% for particular in fixed_p_form %}
+
+                                        <tr class="fixed-duplicate-row">
+                                            <td>{{ particular.project_particulars_name }} {{ particular.id }}</td>
+                                            <td>{{ particular.quantity }}</td>
+                                            <td>-</td>
+                                            <td>{{ particular.amount }}</td>
+                                            <td>
+                                                {% if is_edit %}
+                                                    <button class="btn btn-primary btn-rounded float-right remove-fixed-form-row"
+                                                            type="button">Remove
+                                                    </button>
+                                                {% else %}
+                                                    <button class="btn btn-primary btn-rounded float-right add-fixed-form-row "
+                                                            type="button">Add Another Row (*)
+                                                    </button>
+                                                {% endif %}
+                                        </tr>
+                                        {% if is_edit and forloop.last %}
+                                            <tr>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;"></td>
+                                                <td style="border-style: none;border-top: 1px solid black;">
+                                                    <button class="btn btn-primary btn-rounded add-fixed-form-row float-right">
+                                                        Add
+                                                        Another Row (*)
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                    <tfoot>
+                                    <tr id="fixed-tax-row" style="{% if currency_name != 'INR' %}display: none;{% endif %}">
+                                        <td>Taxes</td>
+
+                                        <td colspan="1" style="padding-left: 34px; " id="total_sgst_rate">
+                                            <label for="id_fixed_sgst">SGST: </label>
+                                            <input type="number" name="fixed_sgst" value="{{ form.sgst.value|default_if_none:0 }}" class="form-control valid" onblur="calculate_fixed_tax();" placeholder="Enter sgst*" required="required" step="0.01" id="id_fixed_sgst" aria-invalid="false">
+                                            </td>
+                                        <td colspan="1">
+                                            <label for="id_fixed_cgst">CGST: </label>
+                                            <input type="number" name="fixed_cgst" value="{{ form.cgst.value|default_if_none:0 }}" class="form-control valid" onblur="calculate_fixed_tax();" placeholder="Enter cgst*" required="required" step="0.01" id="id_fixed_cgst" aria-invalid="false">
+                                            </td>
+                                    <td colspan="1">
+                                        <label for="id_fixed_igst">IGST: </label>
+                                            <input type="number" name="fixed_igst" value="{{ form.igst.value|default_if_none:0 }}" class="form-control valid" onblur="calculate_fixed_tax();" placeholder="Enter igst*" required="required" step="0.01" id="id_fixed_igst" aria-invalid="false">
+                                            </td>
+                                    <td></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>In total</td>
+                                        <td id="fixed_total_hours">{{ context.fixed_total_hours }}</td>
+                                        <td id="fixed_total_unit_rate"></td>
+                                        <td colspan="2"><input type="text" id="fixed_total_amount" name="fixed_total_amount"
+                                                               value="{{ context.fixed_total_amount }}" readonly class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>In words</td>
+                                        <td colspan="4" id="fixed_in_words">{{ context.fixed_amount_in_words }}</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+
+                                <div class="row">
+
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Select Template* </label>
+                                        <select name="select-temp" class="form-control" id="id_template">
+                                          <option value="">Select Template</option>
+                                          <option value="temp1">Template 1</option>
+                                          <option value="temp2">Template 2</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}"
+                           role="button">Cancel</a>
+                        <button class="btn btn-primary btn-rounded action-button float-right mr-2" name="next"
+                                id="final-create-invoice" value="Next" type="submit">Create Invoice
+                        </button>
+                        <button class="btn btn-info btn-rounded float-right mr-2 next action-button" name="preview"
+                                value="Preview"
+                                type="button" id="preview-invoice">Preview
+                        </button>
+                        <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous" value="Previous" type="button">Previous</button>
+                    </div>
+
+                    <div class="tab-pane fade " id="nav-preview" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                        <body class="content">
+
+                        <div class="temp1">
+                            <main style="margin: 0 50px;">
+                            <table class="w-100" role="content" cellspacing="0" cellpadding="0" border="0"
+                                   align="center">
+                                <tr>
+                                    <td class="w-100">
+                                        <table role="header" border="0" cellpadding="0" cellspacing="0" class="w-100">
+                                            <tbody>
+                                            <tr>
+                                                <td class="w-50">
+                                                    <a href="" style="text-decoration:none;">
+                                                        <img width="291"
+                                                             src="https://staging-invoice.systangostudios.com/media/systangologo.png"
+                                                             alt="logo"/>
+                                                    </a>
+                                                </td>
+                                                <td class="w-50"
+                                                    style="font-family: sans-serif; font-size: 20px;line-height: 30px;color: #454444;text-align: right;">
+                                                    {% if is_edit %}
+                                                    <p>Invoice No. <b>XXX-XXXX-XX</b></p>
+                                                    {% else %}
+                                                    <p>Invoice No. <b>{{ form.invoice_number.value }}</b></p>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-100" style="padding-top: 44px;">
+                                        <div class="w-100 first-box">
+                                            <table class="w-100 basic-font">
+                                                <tr class="border-bottom">
+                                                    <td>
+                                                        <table class="w-100">
+                                                            <tr style="vertical-align: top;">
+                                                                <td width="40%"
+                                                                    style="padding: 24px 0 15px 30px;border-right: 1px solid #CED6DD;">
+                                                                    <table>
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <p>
+                                                                                    <span id="id_company_name"
+                                                                                          style="color: #373B5F;font-weight: bold;font-size: 18px;"></span>
+                                                                                    <br><span
+                                                                                        id="id_company_address"><br></span>
+                                                                                </p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td id="id_company_phone_no">
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a href="#" id="id_company_website"></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td width="60%" style="padding: 24px 0 20px 70px;">
+                                                                    <table>
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <span style="color: #3A3A3A;font-weight: bold;font-size: 18px;line-height: 28px;">{% now "jS F" %}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="line-height: 31px;">
+                                                                                Bill to –
+                                                                                <span id="id_client_name"> </span><br>
+                                                                                <span id="id_client_address">  </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr class="w-100">
+                                                    <td valign="middle" style="padding: 6px 30px;">
+                                                        Agreement/PO/WO reference details : Standard Service Agreement
+                                                        Dated –
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="w-100" style="padding-top: 50px;">
+                                        <div class="w-100 second-box">
+                                            <table class="w-100 basic-font">
+                                                <thead>
+                                                <tr>
+                                                    <td valign="middle" width="10%"
+                                                        style="color: #3A3A3A;line-height: 28px;font-weight: bold;padding: 5px 10px;">
+                                                        S.No.
+                                                    </td>
+                                                    <td valign="middle" width="45%"
+                                                        style="color: #3A3A3A;line-height: 28px;font-weight: bold;padding: 5px 30px;">
+                                                        Particulars
+                                                    </td>
+                                                    <td valign="middle" width="15%"
+                                                        style="color: #3A3A3A;line-height: 28px;font-weight: bold;padding: 5px 10px;text-align: center;">
+                                                        <span id="qty_heading">Qty ( In hours )</span>
+                                                    </td>
+                                                    <td valign="middle" width="15%"
+                                                        style="color: #3A3A3A;line-height: 28px;font-weight: bold;padding: 5px 10px;text-align: center;">
+                                                        Unit Rate
+                                                    </td>
+                                                    <td valign="middle" width="15%"
+                                                        style="color: #3A3A3A;line-height: 28px;font-weight: bold;padding: 5px 10px;text-align: center;">
+                                                        Amount (in USD)
+                                                    </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                <tr>
+                                                    <td valign="top" class="basic-border" width="10%"
+                                                        style="padding: 5px 10px;">
+                                                        1.
+                                                    </td>
+                                                    <td valign="top" class="basic-border" width="45%"
+                                                        style="padding: 5px 30px;">
+                                                        <span id="id_invoice_project">Web Development</span>
+                                                        <br>
+                                                        <span id="id_invoice_p_items"
+                                                              style="text-align: right;font-size: 15px;line-height: 30px;">
+Web Developer
+<br>IOS Developer
+<br>Android Developer
+<br>Designer
+<br>QA
+</span>
+                                                    </td>
+                                                    <td valign="top" id="id_invoice_p_qty" class="basic-border"
+                                                        width="15%"
+                                                        style="padding: 5px 10px;color: #9D9A9A;text-align: center;">
+                                                        ---
+                                                    </td>
+                                                    <td valign="top" id="id_invoice_p_rate" class="basic-border"
+                                                        width="15%"
+                                                        style="padding: 5px 10px;color: #9D9A9A;text-align: center;">
+                                                        ---
+                                                    </td>
+                                                    <td valign="top" id="id_invoice_p_amount" class="basic-border"
+                                                        width="15%"
+                                                        style="padding: 5px 10px;color: #9D9A9A;text-align: center;">
+                                                        ---
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" width="85%" valign="middle" class="basic-border"
+                                                        style="padding: 10px 0;line-height: 23px;font-weight: bold;text-align: center;">
+                                                        Total In Words: <span id="total_in_words"></span>
+                                                    </td>
+                                                    <td valign="middle" width="15%" class="basic-border"
+                                                        style="padding: 10px 0;line-height: 23px;font-weight: bold;text-align: center;">
+
+                                                      <!--   <span id="invoice_currency"></span> <span id="invoice_total_amount"></span> -->
+                                                        
+                                           <!--  Total Amount ###<span id="invoice_total_amount"></span> in <span
+                                                            id="invoice_currency"></span>
+ -->
+                                                        <span id="invoice_currency"></span> <span id="invoice_total_amount"></span> 
+                                                      
+                                                              
+                                                             
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle" class="basic-border" width="10%"
+                                                        style="padding: 5px 10px;color: #605F5F;line-height: 23px;">
+
+                                                    </td>
+                                                    <td valign="middle" class="basic-border" width="45%"
+                                                        style="padding: 5px 30px;color: #605F5F;line-height: 23px;">
+                                                         <span id="invoice_exchange_rate"></span>
+                                                    </td>
+                                                    <td colspan="2" valign="middle" class="basic-border" width="30%"
+                                                        style="padding: 5px 10px;color: #605F5F;line-height: 23px;text-align: center;">
+                                                        Invoice Amount <span id="invoice_currency_inr"></span>
+                                                        <br>in INR
+                                                    </td>
+                                                    <td valign="middle" class="basic-border" width="15%"
+                                                        style="padding: 5px 10px;color: #605F5F;line-height: 23px;">
+
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="w-100" style="padding-top: 50px;">
+                                        <table class="w-100 third-box basic-font">
+                                            <tr style="vertical-align: top;">
+                                                <td width="45%"
+                                                    style="padding: 24px 30px;border-right: 1px solid #CED6DD;">
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <span style="color: #3A3A3A;font-weight: bold;font-size: 18px;line-height: 28px;">Bank Details</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_bank_name">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_bank_addr">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_bank_acc">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_ifsc">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_eefc">
+
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td width="55%" style="padding: 24px 0 75px 70px;">
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <span style="color: #3A3A3A;font-weight: bold;font-size: 18px;line-height: 28px;">Other Details</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_invoice_additional">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td id="id_bank_ad_code">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="w-100" style="padding-top: 50px;">
+                                        <table class="w-100 fourth-box basic-font">
+                                            <tbody>
+                                            <tr>
+                                                <td style="padding: 24px 0 0 30px">
+                                                    <p>
+<span style="color: #3A3A3A;font-weight: bold;font-size: 18px;">Subject to Terms & Conditions:
+</span>
+                                                        <br><br>
+                                                        <span style="padding-left: 26px;line-height: 23px;"></span>
+                                                        <span style="padding-left: 26px;line-height: 23px;" id="id_terms_condition_inv"></span>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 40px 0 20px 30px; line-height: 23px;" id="id_inv_lut_bond">
+
+                                                </td>
+                                            </tr>
+                                            <tr style="background-color: #F3F3F4;line-height: 23px;">
+                                                <td style="padding: 10px 30px;" id="id_inv_self_declaration">
+                                                    Declaration: We declare that this invoice shows the actual price of
+                                                    the services described and that all particulars are true and
+                                                    correct.
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="w-100 basic-font" style="padding-top: 120px;">
+                                        <table class="w-100">
+                                            <tr>
+                                                <td style="color: #253542;line-height: 31px;">
+                                                    <span id="id_footer_company_name"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #656565;" id="id_inv_company_cin">
+                                                                                                        CIN:
+                                                </td>
+                                            </tr>
+                                            <tr valign="middle">
+                                                <td class="w-100">
+                                                    <div class="w-100" style="padding-top: 10px;">
+                                                        <table class="w-100">
+                                                            <tr>
+                                                                <td style="font-size: 14px;text-align: left;color: #323333;"
+                                                                    width="50%">
+                                                                    <a href="" style="text-decoration:none;">
+                                                                        <img src="https://staging-invoice.systangostudios.com/media/location.png"
+                                                                             alt="location"/>
+                                                                    </a>
+                                                                    <span id="id_footer_company_address"></span>
+                                                                </td>
+                                                                <td style="font-size: 14px;text-align: right;color: #323333;"
+                                                                    width="25%">
+                                                                    <a href="" style="text-decoration:none;">
+                                                                        <img src="https://staging-invoice.systangostudios.com/media/phone.png"
+                                                                             alt="phone"/>
+                                                                    </a>
+                                                                    <span id="id_footer_ph_no"></span>
+                                                                </td>
+                                                                <td style="font-size: 14px;text-align: right;color: #323333;"
+                                                                    width="25%">
+                                                                    <a href="" style="text-decoration:none;">
+                                                                        <img src="https://staging-invoice.systangostudios.com/media/website.png"
+                                                                             alt="website"/>
+                                                                    </a>
+                                                                    <span id="id_footer_website"></span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="w-100">
+                                        <div class="w-100">
+                                            <table class="w-100">
+                                                <tr>
+                                                    <td valign="center" width="20%">
+                                                        <hr class="footer-hr" style="color: #E77817;">
+                                                    </td>
+                                                    <td valign="center" width="20%">
+                                                        <hr class="footer-hr" style="color: #E99746;">
+                                                    </td>
+                                                    <td valign="center" width="20%">
+                                                        <hr class="footer-hr" style="color: #E77817;">
+                                                    </td>
+                                                    <td valign="center" width="20%">
+                                                        <hr class="footer-hr" style="color: #373B5F;">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </main>
+                        </div>
+                        <div class="temp2">
+                            <main style="margin: 0 50px;">
+                                <table class="w-100" role="content" cellspacing="0" cellpadding="0" border="0" align="center">
+                                        <tr>
+                                            <td class="w-100" style="padding-top: 44px;">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tr class="border-bottom">
+                                                            <td>
+                                                                <table class="w-100">
+                                                                    <tr style="vertical-align: top;">
+                                                                        <td width="100%" style="padding: 24px 0 15px 30px;">
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p> <span id="id_company_name" style="color: #373b5f; font-weight: bold; font-size: 18px;"></span>
+                                                                                                <br /> <span id="id_company_address"><br /></span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td id="id_company_phone_no"></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tr class="border-bottom">
+                                                            <td>
+                                                                <table class="w-100">
+                                                                    <tr style="vertical-align: top;">
+                                                                        <td width="40%" style="padding: 24px 0 15px 30px; border-right: 1px solid #ced6dd;">
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p> <span id="id_company_name_temp2" style="color: #373b5f; font-weight: bold; font-size: 18px;"></span>
+                                                                                                <br /> <span id="id_company_address"><br /></span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>GSTN :-<span id="id_company_gstn"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>LLP IDENTIFICATION NO. :-<span id="id_inv_company_cin"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>State / Code :-<span id="id_company_zip_code"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td width="60%" style="padding: 24px 0 20px 70px;">
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>Serial No. of Invoice :-<span id="id_invoice_number"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>Date of Invoice :-<span id="id_invoice_date"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>PAN NO :-<span id="id_company_pan_no"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>LUT NO :-<span id="id_company_lut_no"></span></p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="50%" style="padding: 5px 10px;text-align: center;"> Details of Receiver (Billed to) </td>
+                                                                <td valign="top" class="basic-border" width="50%" style="padding: 5px 10px;text-align: center;border-left: 1px solid #000;"> Details of Consignee (Shipped to) </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tr class="border-bottom">
+                                                            <td>
+                                                                <table class="w-100">
+                                                                    <tr style="vertical-align: top;">
+                                                                        <td width="50%" style="padding: 24px 0 15px 30px; border-right: 1px solid #ced6dd;">
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td style="line-height: 31px;"> Name :- <span id="id_client_name"> </span> </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>Address :- <span id="id_client_address"> </span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="line-height: 31px;"> State / Code :- <span id="id_client_address_zip"></span> </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>GSTIN/Unique ID :- <span id="id_client_address"> </span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td width="50%" style="padding: 24px 0 20px 70px;">
+                                                                            <table>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td style="line-height: 31px;"> Name :- <span id="id_client_name"> </span> </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>Address :- <span id="id_client_address"> </span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td style="line-height: 31px;"> State / Code :- <span id="id"> </span> </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <p>GSTIN/Unique ID :- <span id="id"> </span> </p>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">SR NO</td>
+                                                                <td valign="top" class="basic-border" width="40%" style="padding: 5px 10px;text-align: center;">Description of work</td>
+                                                                <td valign="top" class="basic-border" width="15%" style="padding: 5px 10px;text-align: center;">SAC</td>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">Rate</td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;">Taxable Value</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">
+                                                                    <br>1</td>
+                                                                <td valign="top" class="basic-border" width="40%" style="padding: 5px 10px;text-align: center;"> <span id="id_invoice_p_items" style="font-size: 15px; line-height: 30px;"></span> </td>
+                                                                <td valign="top" class="basic-border" width="15%" style="padding: 5px 10px;text-align: center;">
+                                                                    <br>998313</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_p_rate" width="10%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: right;"> <span id="invoice_total_amount"></span> </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="50%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;"> TAXABLE VALUE </td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;"> <span id="invoice_total_amount"></span> </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="50%" style="padding: 5px 10px;text-align: center;">BANK/NEFT DETAIL</td>
+                                                                <td valign="top" class="basic-border" width="15%" style="padding: 5px 10px;text-align: center;">CGST @</td>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">9.0%</td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">Account Name</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_bank_name" width="30%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="15%" style="padding: 5px 10px;text-align: center;">SGST @</td>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">9.0%</td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">BANK & BRANCH</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_bank_addr" width="30%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="15%" style="padding: 5px 10px;text-align: center;">IGST @</td>
+                                                                <td valign="top" class="basic-border" width="10%" style="padding: 5px 10px;text-align: center;">18%</td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">IFSC CODE</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_ifsc" width="30%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;">Round up</td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;">0.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">ACC NO</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_bank_acc" width="30%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;">TOTAL VALUE in figures</td>
+                                                                <td valign="top" class="basic-border" id="invoice_total_amount" width="25%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">Bank IBAN/ABA/SWIFT Code</td>
+                                                                <td valign="top" class="basic-border" id="id_invoice_bank_acc" width="30%" style="padding: 5px 10px;text-align: center;"></td>
+                                                                <td valign="top" class="basic-border" width="50%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="20%" style="padding: 5px 10px;text-align: center;">Total Value In words:-</td>
+                                                                <td valign="top" class="basic-border" id="total_in_words" width="80%" style="padding: 5px 10px;text-align: center;"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="w-100">
+                                                <div class="w-100 first-box">
+                                                    <table class="w-100 basic-font">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td valign="top" class="basic-border" width="65%" style="padding: 5px 10px;">Terms & Condition:
+                                                                    <br> 1) All transaction subject to Vadodara Jurisdiction. </td>
+                                                                <td valign="top" class="basic-border" width="25%" style="padding: 5px 10px;text-align: center;">For DIGITRIX SOFTWARE LLP
+                                                                    <br> PARTNER </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                            </main>
+                        </div>
+
+                        </body>
+                        
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}"
+                           role="button">Cancel</a>
+                        <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
+                                value="Next" type="submit">Create Invoice
+                        </button>
+                        <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous"
+                                value="Previous"  type="button">Previous</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Disable form submissions if there are invalid fields
+        $(function () {
+            'use strict';
+            $(".previous").click(function (endblock) {
+                var previous = $('#nav-tab a.active').prev()
+                previous.length ?
+                    $(previous).tab('show'):
+                    $('#nav-tab a')[0].click();
+
+            });
+
+            $("#final-create-invoice").click(function (e) {
+                $("#msform").submit();
+            });
+            $(".next").click(function (e) {
+                $("#msform").trigger('submit');
+            });
+
+            $("#msform").submit(function (e) {
+                e.preventDefault();
+            }).validate({
+                submitHandler: function (form) {
+                    var next = $('#nav-tab a.active').next()
+                    next.length ?
+                        $(next).tab('show'):
+                        form.submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

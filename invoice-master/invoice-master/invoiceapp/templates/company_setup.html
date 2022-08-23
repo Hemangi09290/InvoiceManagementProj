@@ -1,0 +1,406 @@
+{% extends "main_base.html" %}
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+{% block content %}
+
+    <script src="{% static 'js/bankformset.js' %}"></script>
+    <script src="{% static 'js/formset_address.js' %}"></script>
+    <script src="{% static 'js/form_validation.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <form id="msform" method="POST" enctype="multipart/form-data" action="">
+        {% csrf_token %}
+        <a class="btn btn-primary btn-rounded float-right" href="{% url "company-basic" %}" role="button">Back To
+            List</a>
+
+        <br> <br>
+
+        <div class="row">
+
+            <div class="col-md-12 custom-tabs">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item_ nav-link active" id="nav-home-tab" data-toggle="" href="#nav-basic"
+                           role="tab" aria-controls="nav-home" aria-selected="true">
+                            Basic Information
+                        </a>
+                        <a class="nav-item_ nav-link" id="nav-profile-tab" data-toggle="" href="#nav-additional"
+                           role="tab" aria-controls="nav-profile" aria-selected="false">
+                            Aditional Information
+                        </a>
+                        <a class="nav-item_ nav-link" id="nav-profile-tab" data-toggle="" href="#nav-bank" role="tab"
+                           aria-controls="nav-profile" aria-selected="false">
+                            Bank Details
+                        </a>
+                    </div>
+                </nav>
+                <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-basic" role="tabpanel"
+                         aria-labelledby="nav-home-tab">
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% if form2.errors %}
+                            {% for field in form2 %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% if form3.errors %}
+                            {% for field in form3 %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% if form4.errors %}
+                            {% for field in form4 %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ field.name }}: {{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="row">
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+
+                                {% if  is_edit %}
+                                    {{ form.logo }}
+                                     <label style=" font-style: monospace; opacity: 0.7;"> Add Company Logo </label>
+                                    <img src="{{ logourl }}" class="rounded" width="40px;" height="40px;"/>
+
+                                {% else %}
+                                 <label style=" font-style: monospace; opacity: 0.7;"> Add Company Logo </label>
+
+                                    {{ form.logo }}
+                                {% endif %}
+
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!--  <input class="form-control" placeholder="Enter Company name *" type="text" name="name" maxlength="50" required="" id="id_name" value=""> -->
+                                  <label style=" font-style: monospace; opacity: 0.7;"> Email Company Name*</label>
+                                {{ form.name }}
+                                <span id="name" style="color: red;"></span>
+                            </div>
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!--   <input class="form-control" placeholder="Wesite *" type="text" name="website" maxlength="50" required="" id="id_website" value=""> -->
+                                <label style=" font-style: monospace; opacity: 0.7;"> Wesite </label>
+                                {{ form.website }}
+                            </div>
+
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!--   <input class="form-control" placeholder="Wesite *" type="text" name="website" maxlength="50" required="" id="id_website" value=""> -->
+                                <label style=" font-style: monospace; opacity: 0.7;"> Invoice Initial *</label>
+                                {{ form.invoice_initial }}
+                            </div>
+
+                        </div>
+                        
+                        <div class="row">
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                 <label style=" font-style: monospace; opacity: 0.7;"> Phone No </label>
+                                {{ form.phone_no }}
+                            </div>
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                               <label style=" font-style: monospace; opacity: 0.7;"> Email Id </label>
+                                {{ form.email_id }}
+                            </div>
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                              <label style=" font-style: monospace; opacity: 0.7;"> Enter Cin </label>
+                                {{ form.cin }}
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <label style=" font-style: monospace; opacity: 0.7;"> Enter EEFC Account </label>
+                                {{ form.eefc_account }}
+                            </div>
+                        </div> -->
+
+                        {{ form2.management_form }}
+
+                        {% for form1 in form2 %}
+                            <div class="address-row">
+                                <div class="row">
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                        <label style=" font-style: monospace; opacity: 0.7;">  Zip Code</label>
+                                        {{ form1.zip_code }}
+                                        {{ form1.id }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                      <label style=" font-style: monospace; opacity: 0.7;"> Address *</label>
+                                        {{ form1.address }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                      <label style=" font-style: monospace; opacity: 0.7;"> Street </label>
+                                        {{ form1.street }}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4 input-group-append">
+                                        {% if is_edit %}
+                                            <button class="btn btn-danger btn-rounded remove-address"> Remove</button>
+                                        {% else %}
+                                            <button class="btn btn-primary btn-rounded add-address">Add Another Address
+                                                (*)
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if is_edit %}
+                            <button class="btn btn-primary btn-rounded add-address">Add Another Address (*)</button>
+                        {% endif %}
+
+                        <!--   <button class="btn btn-secondary btn-rounded float-right mr-2" type="reset">Cancel</button> -->
+
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "company-basic" %}"
+                           role="button">Cancel</a>
+
+
+                        <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
+                                id="company_basic" value="Next" type="button">Next
+                        </button>
+                    </div>
+
+                    <div class="tab-pane fade " id="nav-additional" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="page-header">
+                            <h1 class="page-title"></h1>
+                        </div>
+                        {{ form3.media }}
+
+                        <div class="row">
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!--  <input class="form-control" placeholder="Company PAN No. *" type="text" name="company_pan_no" maxlength="20" required="" id="id_company_pan_no" value=""> -->
+                                <!--    {{ form3.pk }} -->
+                                <input type="hidden" id="additional_info_id" name="additional_info_id"
+                                       value="{{ additional_info_id }}">
+                                         <label style=" font-style: monospace; opacity: 0.7;"> Company Pan No  </label>
+                                {{ form3.company_pan_no }}
+
+                            </div>
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!-- <input class="form-control" placeholder="GSTN *" type="text" name="gstn" maxlength="100" required="" id="id_gstn" value=""> -->
+                                 <label style=" font-style: monospace; opacity: 0.7;"> GSTN </label>
+                                {{ form3.gstn }}
+
+                            </div>
+
+                            <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                <!-- <input class="form-control" placeholder="IEC" type="text" name="iec" maxlength="100" id="id_iec" value="">
+               -->
+                                <label style=" font-style: monospace; opacity: 0.7;">  IEC </label>
+                                {{ form3.iec }}
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="form-group col-xl-2 col-md-2 col-lg-2">
+                                <label style=" font-style: monospace; opacity: 0.7; vertical-align: top;"
+                                       for="{{ form3.lut_bond.id_for_label }}"><b>LUT BOND  </b></label>
+                            </div>
+                            <div class="form-group col-xl-10 col-md-10 col-lg-10">
+                                <!--   <textarea class="form-control" rows="3" id="id_terms_condition" name="terms_condition" placeholder="Terms and condition for payment" value=""></textarea> -->
+
+                                {{ form3.lut_bond }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xl-2 col-md-2 col-lg-2">
+                                <label style=" font-style: monospace; opacity: 0.7; vertical-align: top;"
+                                       for="{{ form3.lut_bond.id_for_label }}"><b>{{ form3.terms_condition.label|title }}  </b></label>
+                            </div>
+                            <div class="form-group col-xl-10 col-md-10 col-lg-10">
+                                <!--  <textarea class="form-control" rows="3" id="id_self_declaration" name="self_declaration" placeholder="Self decelaration ccomputer generated invoice and invoice information true" value=""></textarea> -->
+
+                                {{ form3.terms_condition }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xl-2 col-md-2 col-lg-2">
+                                <label style=" font-style: monospace; opacity: 0.7; vertical-align: top;"
+                                       for="{{ form3.lut_bond.id_for_label }}"><b>{{ form3.self_declaration.label|title }} </b></label>
+                            </div>
+                            <div class="form-group col-xl-10 col-md-10 col-lg-10">
+                                <!--  <textarea class="form-control" rows="3" id="id_self_declaration" name="self_declaration" placeholder="Self decelaration ccomputer generated invoice and invoice information true" value=""></textarea> -->
+
+                                {{ form3.self_declaration }}
+                            </div>
+                        </div>
+
+
+                        <!-- <button class="btn btn-secondary btn-rounded float-right mr-2" type="reset">Cancel</button>
+                         -->
+
+
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "company-basic" %}"
+                           role="button">Cancel</a>
+
+                        
+                        <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
+                                id="company_aditional" value="Next" type="button">Next
+                        </button>
+                        <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous" value="Previous" type="button">Previous</button>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-bank" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        {{ form4.management_form }}
+
+                        {% for form1 in form4 %}
+                            <div class="duplicate-row">
+                                <div class="row">
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                        <label style=" font-style: monospace; opacity: 0.7;"> IFSC Code </label>
+
+                                        {{ form1.ifsc_code }}
+                                    </div>
+                                   <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                    <label style=" font-style: monospace; opacity: 0.7;"> Bank Address </label>
+                                        {{ form1.bank_address }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                       <label style=" font-style: monospace; opacity: 0.7;"> Bank name </label>
+                                        {{ form1.name }}
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                       <label style=" font-style: monospace; opacity: 0.7;"> Branch Code </label>
+                                        {{ form1.branch_code }}
+                                    </div>
+                                     <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                        <label style=" font-style: monospace; opacity: 0.7;"> Enter Account Number </label>
+                                        {{ form1.account_number }}
+                                        {{ form1.id }}
+                                    </div>
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                        <!--  {{form1.account_type}} -->
+
+                                        <label style=" font-style: monospace; opacity: 0.7;"> Account type </label>
+                                        {{ form1.account_type }}
+
+                                    </div>
+
+                                </div>
+
+                            <div class="row">
+                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                  <label style=" font-style: monospace; opacity: 0.7;"> Bank Ad Code </label>
+                                        {{ form1.bank_ad_code }}
+                                    </div>
+
+                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                  <label style=" font-style: monospace; opacity: 0.7;">Enter EEFC Account  </label>
+                                       {{ form1.eefc_account }}
+                                    </div>
+
+                                     <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                  <label style=" font-style: monospace; opacity: 0.7;">Enter Company Cuurency  </label>
+                                       {{ form1.account_currency}}
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="form-group col-xl-4 col-md-4 col-lg-4 input-group-append">
+                                        {% if is_edit %}
+                                            <button class="btn btn-danger btn-rounded remove-form-row"> Remove</button>
+                                        {% else %}
+                                            <button class="btn btn-primary btn-rounded add-form-row">Add Another Address
+                                                (*)
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if is_edit %}
+                            <button class="btn btn-primary btn-rounded add-form-row">Add Another Address (*)</button>
+                        {% endif %}
+                        <!--  <button class="btn btn-secondary btn-rounded float-right mr-2" type="reset">Cancel</button> -->
+
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url "company-basic" %}"
+                           role="button">Cancel</a>
+
+                        
+                        <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
+                                id="company_bank" value="Next" type="submit">Submit
+                        </button>
+                        <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous" value="Previous" type="button">Previous</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        // Disable form submissions if there are invalid fields
+        $(function () {
+            'use strict';
+            $(".previous").click(function (e) {
+                var previous = $('#nav-tab a.active').prev()
+                previous.length ?
+                    $(previous).tab('show'):
+                    $('#nav-tab a')[0].click();
+            });
+            $(".next").click(function (e) {
+                $("#msform").trigger('submit');
+            });
+
+            $("#msform").submit(function (e) {
+                e.preventDefault();
+            }).validate({
+                submitHandler: function (form) {
+                    var next = $('#nav-tab a.active').next()
+                    next.length ?
+                        $(next).tab('show'):
+                        form.submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

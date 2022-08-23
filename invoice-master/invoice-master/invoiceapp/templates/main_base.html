@@ -1,0 +1,90 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/log.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+<!--menu css-->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css" /> 
+<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-multiselect.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-tagsinput.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+<link href="/static/css/responsive-calendar.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.css"/>
+
+ <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+<html>
+<head>
+<title>{% block title %}Invoice Management{% endblock %}
+</title>
+</head>
+<!-- Jquery-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<body>
+{% block body %}
+	{% include "header.html" %}
+		<div class="page">
+			{% include "topnav.html" %}
+			<section class="main-content">
+				<div class="container-fluid">
+					{% block content %}
+				</div>
+			</section>
+		</div>
+        {% endblock %}
+	{% include "footer.html" %}
+{% endblock %}
+<script src="/static/js/menu.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/jquery.datetimepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+<!-- <script src="/static/bootstrap/js/bootstrap.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap-multiselect.js"></script>
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="/static/js/responsive-calendar.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDc3cw_q_7kjC_CKRhqV1t2KFQxuM1R-gU&libraries=places"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<script type="text/javascript">
+	
+	function throwAlert( type, message, options = '' ){
+		var title = '';		
+		switch( type ){
+			case 'error' :
+				title = 'Error!';
+				break;
+			case 'success' : 
+				title = 'Success!!';
+				break;
+			case 'warning' :
+				title = 'Warning!!';
+				break;
+			case 'info' :
+				title = 'Info';
+				break;
+			case 'question' :
+				title = 'Question ?';
+				break;
+		}
+		Swal.fire({
+		 	title: title,
+		  	text: message,
+		  	type: type,
+		  	width : '25%',
+		  	confirmButtonText: 'Ok',
+		  	confirmButtonClass : 'btn btn-primary'
+		});
+	}
+
+</script>
+{% block js_script %}
+
+{% endblock %}
+</body>
+</html>
