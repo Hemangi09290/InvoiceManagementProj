@@ -203,28 +203,28 @@ function preview_invoice_temp2() {
 
             //temp2
             $(".temp2 #id_company_name_temp2").text(response_json.company_name);
-            $(".temp2 #id_company_address").html(response_json.company_address);
-            $(".temp2 #id_footer_ph_no").text(response_json.company_phone_number);
-            $(".temp2 #id_company_website").text(response_json.company_website);
-            $(".temp2 #id_company_gstn").text(response_json.company_gstn);
-            $(".temp2 #id_company_pan_no").text(response_json.company_pan_no);
-            $(".temp2 #id_client_name").text(response_json.client_name);
-            $(".temp2 #id_client_address").text(response_json.client_address);
-            $(".temp2 #id_company_zip_code").text(response_json.company_zip_code);
-            $(".temp2 #id_client_address_zip").text(response_json.client_address_zip);
-            $(".temp2 #id_company_phone_no").text("PH - " + response_json.company_phone_number);
-            $(".temp2 #id_inv_company_cin").html(response_json.company_cin);
-            $(".temp2 #id_invoice_ifsc").text(response_json.company_bank_ifsc);
-            $(".temp2 #id_invoice_bank_name").text(response_json.bank_name);
-            $(".temp2 #id_invoice_bank_addr").text(response_json.bank_address);
-            $(".temp2 #id_invoice_bank_acc").text(response_json.company_bank_acc);
+            $(".temp2 #id_company_address_temp2").html(response_json.company_address);
+            $(".temp2 #id_footer_ph_no_temp2").text(response_json.company_phone_number);
+            $(".temp2 #id_company_website_temp2").text(response_json.company_website);
+            $(".temp2 #id_company_gstn_temp2").text(response_json.company_gstn);
+            $(".temp2 #id_company_pan_no_temp2").text(response_json.company_pan_no);
+            $(".temp2 #id_client_name_temp2").text(response_json.client_name);
+            $(".temp2 #id_client_address_temp2").text(response_json.client_address);
+            $(".temp2 #id_company_zip_code_temp2").text(response_json.company_zip_code);
+            $(".temp2 #id_client_address_zip_temp2").text(response_json.client_address_zip);
+            $(".temp2 #id_company_phone_no_temp2").text("PH - " + response_json.company_phone_number);
+            $(".temp2 #id_inv_company_cin_temp2").html(response_json.company_cin);
+            $(".temp2 #id_invoice_ifsc_temp2").text(response_json.company_bank_ifsc);
+            $(".temp2 #id_invoice_bank_name_temp2").text(response_json.bank_name);
+            $(".temp2 #id_invoice_bank_addr_temp2").text(response_json.bank_address);
+            $(".temp2 #id_invoice_bank_acc_temp2").text(response_json.company_bank_acc);
         },
     });
 
-    $(".temp2 #total_in_words").html(check_empty_value(in_words));
-    $(".temp2 #invoice_total_amount").html(check_empty_value(total_amount));
-    $(".temp2 #invoice_currency").html(check_empty_value(text_currency));
-    $(".temp2 #invoice_currency_inr").text(check_empty_value(total_inr));
+    $(".temp2 #total_in_words_temp2").html(check_empty_value(in_words));
+    $(".temp2 #invoice_total_amount_temp2").html(check_empty_value(total_amount));
+    $(".temp2 #invoice_currency_temp2").html(check_empty_value(text_currency));
+    $(".temp2 #invoice_currency_inr_temp2").text(check_empty_value(total_inr));
 
     let particulars = get_particulars(check_empty_value(prefix));
     if (text_currency==="INR"){
@@ -263,11 +263,11 @@ $("#id_template").change(function(){
 });
 
 $("#preview-invoice").click(function () {
-    preview_invoice();
+    preview_invoice_temp2();
 });
 
 $("#nav-preview-tab").click(function () {
-    preview_invoice();
+    preview_invoice_temp2();
 });
 
 });
