@@ -247,27 +247,30 @@ function preview_invoice_temp2() {
         text_currency = check_empty_value(text_currency);
         $("#invoice_exchange_rate").text("Per "+text_currency+" @ Rs. "+ exchange_rate);
     }
-    $(".temp2 #id_invoice_p_qty").html(check_empty_value(particulars.quantities));
-    $(".temp2 #id_invoice_p_rate").html(check_empty_value(particulars.unit_rates));
-    $(".temp2 #id_invoice_p_amount").html(check_empty_value(particulars.amounts));
-    $(".temp2 #id_invoice_p_amount").html(check_empty_value(particulars.amounts));
-    $(".temp2 #invoice_total_amount").html(check_empty_value(particulars.amounts));
-    $(".temp2 #id_invoice_p_items").html(check_empty_value(particulars.resources));
+    $(".temp2 #id_invoice_p_qty_temp2").html(check_empty_value(particulars.quantities));
+    $(".temp2 #id_invoice_p_rate_temp2").html(check_empty_value(particulars.unit_rates));
+    $(".temp2 #id_invoice_p_amount_temp2").html(check_empty_value(particulars.amounts));
+    $(".temp2 #id_invoice_p_amount_temp2").html(check_empty_value(particulars.amounts));
+    $(".temp2 #invoice_total_amount_temp2").html(check_empty_value(particulars.amounts));
+    $(".temp2 #id_invoice_p_items_temp2").html(check_empty_value(particulars.resources));
 
 }
 
 
-$("#id_template").change(function(){
-   let val = $("#id_template :selected").val();
-   alert(val);
-});
 
 $("#preview-invoice").click(function () {
-    preview_invoice_temp2();
+    let val = $("#id_template :selected").val();
+    if (val == "temp1"){
+       $('.temp2').hide();
+       $('.temp1').show();
+       preview_invoice();
+    }
+    if (val == "temp2"){
+       $('.temp1').hide();
+       $('.temp2').show();
+       preview_invoice_temp2();
+    }
 });
 
-$("#nav-preview-tab").click(function () {
-    preview_invoice_temp2();
-});
 
 });

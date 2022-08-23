@@ -225,7 +225,7 @@
                                         {{ currency_form.exchange_rate }}
                                     </div>
                                 </div>
-                               
+
                                 <table style="{% if form.project_type.value == 'hourly' or  form.project_type.value != 'fixed price' %}display:table;{% else %} display: none;{% endif %}" class="table table-bordered" id="project_table">
                                     <thead>
                                     <tr class="table_hd">
@@ -388,9 +388,8 @@
 
                                     <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Template* </label>
-                                        <select name="select-temp" class="form-control" id="id_template">
-                                          <option value="">Select Template</option>
-                                          <option value="temp1">Template 1</option>
+                                        <select name="select-temp" class="form-control" id="id_template" placeholder="Select Template" required>
+                                            <option value="temp1">Template 1</option>
                                           <option value="temp2">Template 2</option>
                                         </select>
                                     </div>
@@ -399,7 +398,7 @@
 
                             </div>
                         </div>
-                        
+
                         <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}"
                            role="button">Cancel</a>
                         <button class="btn btn-primary btn-rounded action-button float-right mr-2" name="next"
@@ -591,14 +590,14 @@ Web Developer
                                                         style="padding: 10px 0;line-height: 23px;font-weight: bold;text-align: center;">
 
                                                       <!--   <span id="invoice_currency"></span> <span id="invoice_total_amount"></span> -->
-                                                        
+
                                            <!--  Total Amount ###<span id="invoice_total_amount"></span> in <span
                                                             id="invoice_currency"></span>
  -->
-                                                        <span id="invoice_currency"></span> <span id="invoice_total_amount"></span> 
-                                                      
-                                                              
-                                                             
+                                                        <span id="invoice_currency"></span> <span id="invoice_total_amount"></span>
+
+
+
 
                                                     </td>
                                                 </tr>
@@ -1168,7 +1167,7 @@ Web Developer
                         </div>
 
                         </body>
-                        
+                        <br>
                         <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}"
                            role="button">Cancel</a>
                         <button class="btn btn-primary btn-rounded next action-button float-right mr-2" name="next"
