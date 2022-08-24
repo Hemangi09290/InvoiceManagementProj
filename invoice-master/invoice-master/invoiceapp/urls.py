@@ -5,6 +5,7 @@ from invoiceapp.views import (InvoiceView, invoice_cancel_view, InvoiceUpdateVie
                               get_all_addresses, delete_particulars, delete_address, delete_bank, ReportListView,
                               ClientSetup, ClientUpdateView, generate_preview_invoice, InvoiceDetailView,
                               update_payment_status, get_sub_unit)
+from invoiceapp.views.common import generate_preview_invoice_temp2
 
 urlpatterns = [
     path('', login_required(CompanyListView.as_view(), login_url='/accounts/login'), name="company-basic"),
@@ -45,5 +46,7 @@ urlpatterns = [
          name="invoice-preview-fixed"),
     path('invoice-preview/', login_required(generate_preview_invoice, login_url='/accounts/login'),
          name="invoice-preview"),
+    path('invoice-preview-temp2/', login_required(generate_preview_invoice_temp2, login_url='/accounts/login'),
+         name="invoice-preview-temp2"),
     path('currency/<pk>', login_required(get_sub_unit, login_url='/accounts/login'), name='currency'),
 ]

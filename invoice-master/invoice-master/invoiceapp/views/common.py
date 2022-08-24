@@ -177,14 +177,14 @@ def generate_preview_invoice_temp2(request):
 
     if company_address_id:
         company_address = Address.objects.get(pk=company_address_id)
-        invoice["company_address"] = "{0}, <br>{1}, {2}".format(
+        invoice["company_address"] = "{0}, {1}, {2}".format(
             value_exists(company_address.street), value_exists(company_address.address), value_exists(company_address.zip_code)
         )
         invoice["company_zip_code"] = value_exists(company_address.zip_code)
 
     if client_address_id:
         client_address = Address.objects.get(pk=company_address_id)
-        invoice["client_address"] = "{0}, <br>{1}, {2}, <br>".format(
+        invoice["client_address"] = "{0}, {1}, {2}".format(
             value_exists(client_address.street), value_exists(client_address.address), value_exists(client_address.zip_code)
         )
         invoice["client_address_zip"] = value_exists(client_address.zip_code)
