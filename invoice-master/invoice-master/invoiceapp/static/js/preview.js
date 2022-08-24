@@ -35,6 +35,35 @@ $(document).ready(function() {
       }
   }
 
+
+  function get_particulars_temp2(prefix="form") {
+      let total_forms = $("#id_"+prefix+"-TOTAL_FORMS").val();
+      console.log(total_forms);
+      var i;
+      let resources = "", quantities = "", unit_rates = "", amounts = "";
+
+      for (i = 0; i < total_forms; i++) {
+          let unit_rate_val = "", resource = "";
+          if (prefix === "form") {
+               resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
+               unit_rate_val = $("#id_" + prefix + "-" + i.toString() + "-unit_rate").val();
+          }else{
+              resource = $("#id_" + prefix + "-" + i.toString() + "-project_particulars_name").val();
+              unit_rate_val = "";
+          }
+          let quantity = $("#id_"+prefix+"-" + i.toString() + "-quantity").val();
+
+          let amount = $("#id_"+prefix+"-" + i.toString() + "-amount").val();
+          quantities = quantities + quantity;
+          unit_rates = unit_rates + unit_rate_val;
+          amounts = amounts + amount;
+          resources = resources + resource;
+      }
+      return {
+          quantities, amounts, unit_rates, resources
+      }
+  }
+
 function preview_invoice() {
     let id_company = $("#id_company :selected").val();
     let id_company_bank = $("#id_company_bank :selected").val();
@@ -191,7 +220,7 @@ function preview_invoice_temp2() {
     if ((!isNaN(total_amount) && (!isNaN(exchange_rate)))) {
         total_inr = parseFloat(total_amount) * parseFloat(exchange_rate);
     }
-    let url = "/invoice-preview?company=" + id_company + "&client=" + id_client + "&from_address=" + id_from_address + "&to_address=" + id_to_address + "&bank_id=" + id_company_bank
+    let url = "/invoice-preview-temp2?company=" + id_company + "&client=" + id_client + "&from_address=" + id_from_address + "&to_address=" + id_to_address + "&bank_id=" + id_company_bank
 
     $.ajax({
         url: url,
@@ -226,7 +255,7 @@ function preview_invoice_temp2() {
     $(".temp2 #invoice_currency_temp2").html(check_empty_value(text_currency));
     $(".temp2 #invoice_currency_inr_temp2").text(check_empty_value(total_inr));
 
-    let particulars = get_particulars(check_empty_value(prefix));
+    let particulars = get_particulars_temp2(check_empty_value(prefix));
     if (text_currency==="INR"){
             if(cgst_val && cgst_val != 0){
                 particulars.amounts = particulars.amounts+"<br>"+cgst_amt.toFixed(2);

@@ -131,6 +131,67 @@ def generate_preview_invoice(request):
     return HttpResponse(json.dumps(invoice))
 
 
+def generate_preview_invoice_temp2(request):
+    company_id = request.GET.get("company")
+    client_id = request.GET.get("client")
+    company_address_id = request.GET.get("from_address")
+    client_address_id = request.GET.get("to_address")
+    bank_id = request.GET.get("bank_id")
+    invoice = {}
+
+    if company_id:
+        company = Company.objects.get(pk=company_id)
+        invoice["company_name"] = value_exists(company.name)
+        invoice["company_logo_url"] = company.logo.url if company.logo else ""
+        invoice["company_website"] = value_exists(company.website)
+        invoice["company_phone_number"] = value_exists(company.phone_no)
+        invoice["company_email_id"] = value_exists(company.email_id)
+        invoice["company_cin"] = value_exists(company.cin)
+        company_additional_info = CompanyAdditionalInfo.objects.filter(company=company).first()
+        invoice["company_additional"] = "PAN: {0}, <br> IEC: {1}, <br> GSTN: {2}, <br> ".format(
+            value_exists(company_additional_info.company_pan_no), value_exists(company_additional_info.iec),
+            value_exists(company_additional_info.gstn)
+        )
+        invoice["company_gstn"] = value_exists(company_additional_info.gstn)
+        invoice["company_pan_no"] = value_exists(company_additional_info.company_pan_no)
+        invoice["terms_condition"] = "2. {0}".format(value_exists(company_additional_info.terms_condition.strip()))
+        invoice["lut_bond"] = value_exists(company_additional_info.lut_bond)
+        invoice["self_declaration"] = "Declaration: {0}".format(value_exists(company_additional_info.self_declaration))
+
+    if bank_id:
+        company_bank = CompanyBankDetail.objects.get(pk=bank_id)
+        invoice["bank_name"] = "{0}".format(value_exists(company_bank.name))
+        invoice["bank_address"] = "{0}".format(value_exists(company_bank.bank_address))
+        invoice["company_bank"] = "{0}".format(value_exists(company_bank.bank_ad_code))
+        invoice["company_bank_acc"] = "{0}".format(value_exists(company_bank.account_number))
+        invoice["company_bank_ifsc"] = "{0}".format(value_exists(company_bank.ifsc_code))
+        invoice["bank_ad_code"] = "{0}".format(value_exists(company_bank.bank_ad_code))
+        invoice["company_bank_eefc"] = "{0}".format(value_exists(company_bank.eefc_account))
+
+    if client_id:
+        client = Client.objects.get(pk=client_id)
+        invoice["client_name"] = client.name
+        invoice["client_logo_url"] = client.logo.url if client.logo else ""
+        invoice["client_website"] = value_exists(client.website)
+        invoice["project_name"] = client.project.name if client.project else ""
+
+    if company_address_id:
+        company_address = Address.objects.get(pk=company_address_id)
+        invoice["company_address"] = "{0}, <br>{1}, {2}".format(
+            value_exists(company_address.street), value_exists(company_address.address), value_exists(company_address.zip_code)
+        )
+        invoice["company_zip_code"] = value_exists(company_address.zip_code)
+
+    if client_address_id:
+        client_address = Address.objects.get(pk=company_address_id)
+        invoice["client_address"] = "{0}, <br>{1}, {2}, <br>".format(
+            value_exists(client_address.street), value_exists(client_address.address), value_exists(client_address.zip_code)
+        )
+        invoice["client_address_zip"] = value_exists(client_address.zip_code)
+
+    return HttpResponse(json.dumps(invoice))
+
+
 def save_particular_formset(total_forms, data, invoice=None, prefix='form'):
     for i in range(total_forms):
         id_address = '{0}-{1}-id'.format(prefix, i)
