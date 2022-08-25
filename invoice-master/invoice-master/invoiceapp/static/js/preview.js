@@ -287,7 +287,7 @@ function preview_invoice_temp2() {
 
 
 
-$("#preview-invoice").click(function () {
+$("#next-preview-invoice").click(function () {
     let val = $("#id_template :selected").val();
     if (val == "temp1"){
        $('.temp2').hide();
