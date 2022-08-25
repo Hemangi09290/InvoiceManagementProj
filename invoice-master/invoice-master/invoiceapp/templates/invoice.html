@@ -113,6 +113,10 @@
                            aria-controls="nav-profile" aria-selected="false">
                             Particular / Item
                         </a>
+                        <a class="nav-item_ nav-link" id="nav-template-tab" data-toggle="" href="#nav-tab-template"
+                           role="tab" aria-controls="nav-profile" aria-selected="false" target="_blank">
+                            Select Template
+                        </a>
                         <a class="nav-item_ nav-link" id="nav-preview-tab" data-toggle="" href="#nav-preview"
                            role="tab" aria-controls="nav-profile" aria-selected="false" target="_blank">
                             Preview Invoice
@@ -384,8 +388,25 @@
                                     </tfoot>
                                 </table>
 
-                                <div class="row">
+                            </div>
+                        </div>
 
+                        <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}"
+                           role="button">Cancel</a>
+                        <button class="btn btn-primary btn-rounded action-button float-right mr-2" name="next"
+                                id="final-create-invoice" value="Next" type="submit">Create Invoice
+                        </button>
+                        <button class="btn btn-info btn-rounded float-right mr-2 next action-button" name="preview"
+                                value="Preview"
+                                type="button" id="preview-invoice">Preview
+                        </button>
+                        <button class="btn btn-primary btn-rounded previous float-right mr-2" name="previous" value="Previous" type="button">Previous</button>
+                    </div>
+
+                    <div class="tab-pane fade " id="nav-tab-template" role="tabpanel" aria-labelledby="nav-template-tab">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
                                     <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Template* </label>
                                         <select name="select-temp" class="form-control" id="id_template" placeholder="Select Template" required>
@@ -393,9 +414,7 @@
                                           <option value="temp2">Template 2</option>
                                         </select>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
 
