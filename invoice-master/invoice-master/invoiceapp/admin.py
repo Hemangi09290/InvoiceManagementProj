@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (Project, Address, Company, CompanyAdditionalInfo, CompanyBankDetail, Client,
-                     Invoice, Particular, BankAccountType, ResourceType, Currency, FixedBidParticular,AccountCurency)
+                     Invoice, Particular, BankAccountType, ResourceType, Currency, FixedBidParticular, AccountCurency,
+                     Developer)
 
 
 @admin.register(Project)
@@ -16,7 +17,8 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['status','name', 'logo', 'email_id', 'phone_no', 'website', 'invoice_initial', 'invoice_count', 'created_at']
+    list_display = ['status', 'name', 'logo', 'email_id', 'phone_no', 'website', 'invoice_initial', 'invoice_count',
+                    'created_at']
 
 
 @admin.register(CompanyAdditionalInfo)
@@ -26,19 +28,21 @@ class CompanyAdditionalAdmin(admin.ModelAdmin):
 
 @admin.register(CompanyBankDetail)
 class CompanyBankDetailAdmin(admin.ModelAdmin):
-    list_display = ['name', 'company', 'account_number', 'account_type', 'ifsc_code', 'bank_ad_code','eefc_account','account_currency']
+    list_display = ['name', 'company', 'account_number', 'account_type', 'ifsc_code', 'bank_ad_code', 'eefc_account',
+                    'account_currency']
 
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ['status','name', 'logo', 'email_id', 'phone_no', 'website', 'pan', 'gstn', 'iec', 'project', 'project_type', 'agreement_detail',
+    list_display = ['status', 'name', 'logo', 'email_id', 'phone_no', 'website', 'pan', 'gstn', 'iec', 'project',
+                    'project_type', 'agreement_detail',
                     'agreement_date', 'agreement']
 
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['is_active','from_address_text', 'website', 'to_address_text', 'company', 'company_name', 'client',
-                    'client_name', 'invoice_number', 'project_name',  'created_at']
+    list_display = ['is_active', 'from_address_text', 'website', 'to_address_text', 'company', 'company_name', 'client',
+                    'client_name', 'invoice_number', 'project_name', 'created_at']
 
 
 @admin.register(Particular)
@@ -49,6 +53,7 @@ class ParticularAdmin(admin.ModelAdmin):
 @admin.register(BankAccountType)
 class BankAccountTypeAdmin(admin.ModelAdmin):
     list_display = ['type']
+
 
 @admin.register(AccountCurency)
 class AccountCurencyAdmin(admin.ModelAdmin):
@@ -67,4 +72,10 @@ class ResourceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(FixedBidParticular)
 class FixedParticularAdmin(admin.ModelAdmin):
-    list_display = ["project_particulars_name", "invoice",  "quantity", "amount"]
+    list_display = ["project_particulars_name", "invoice", "quantity", "amount"]
+
+
+@admin.register(Developer)
+class DeveloperAdmin(admin.ModelAdmin):
+    list_display = ["name", "phone_no", "email_id", "project", "project_type", "resource_type"]
+

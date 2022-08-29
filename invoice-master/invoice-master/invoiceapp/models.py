@@ -258,3 +258,41 @@ class FixedBidParticular(models.Model):
         total_amount = cls.objects.filter(invoice=invoice).aggregate(
             Sum("amount"))
         return total_hours.get("quantity__sum"), total_amount.get("amount__sum")
+
+
+class Developer(models.Model):
+    name = models.CharField(max_length=50)
+    phone_no = models.CharField(max_length=12, null=True, blank=True)
+    email_id = models.EmailField(max_length=50, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True,
+                                blank=True)
+    project_type = models.CharField(max_length=50, choices=PROJECT_TYPE,
+                                    default='hourly')
+    resource_type = models.ForeignKey(ResourceType, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class ParticularDeveloper(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    developer = models.ForeignKey(Developer, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=8, decimal_places=2)
+    unit_rate = models.DecimalField(max_digits=8, decimal_places=2)
+    amount = models.DecimalField(max_digits=13, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=13, decimal_places=2)
+
+    def __str__(self):
+        return self.developer.developer_name
+
+    @classmethod
+    def get_sum_of_column(cls, invoice):
+        total_hours = cls.objects.filter(invoice=invoice).aggregate(
+            Sum("quantity"))
+        total_unit_rate = cls.objects.filter(invoice=invoice).aggregate(
+            Sum("unit_rate"))
+        total_amount = cls.objects.filter(invoice=invoice).aggregate(
+            Sum("amount"))
+        return (
+        total_hours.get("quantity__sum"), total_unit_rate.get("unit_rate__sum"),
+        total_amount.get("amount__sum"))

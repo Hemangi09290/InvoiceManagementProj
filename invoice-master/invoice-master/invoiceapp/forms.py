@@ -2,7 +2,7 @@ from django import forms
 from invoiceapp.models import (Company, CompanyAdditionalInfo,
                                CompanyBankDetail, Client, Invoice, Particular,
                                Address,
-                               Currency, FixedBidParticular)
+                               Currency, FixedBidParticular, Developer)
 from django.forms import modelformset_factory
 
 
@@ -287,6 +287,63 @@ class InvoiceForm(forms.ModelForm):
             company.invoice_count = company_invoice_cnt
             company.save()
         return invoice
+
+
+class DeveloperForm(forms.ModelForm):
+    class Meta:
+        model = Developer
+        fields = "__all__"
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter Developer Name *',
+                                           'class': 'form-control'}),
+            'project': forms.Select(attrs={'class': 'form-control'}),
+            'project_type': forms.Select(attrs={'class': 'form-control'}),
+            "resource_type": forms.Select(attrs={'class': 'form-control',
+                                                 'placeholder': 'Select Resource Type',
+                                                 'required': 'required'}),
+            'phone_no': forms.TextInput(
+                attrs={'placeholder': 'Phone No.', 'class': 'form-control'}),
+            'email_id': forms.EmailInput(
+                attrs={'placeholder': 'Email id', 'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(DeveloperForm, self).__init__(*args, **kwargs)
+        # self.fields['project'].empty_label = 'PROJECT NAME'
+        # self.fields['project_type'].empty_label = 'PROJECT TYPE'
+
+
+def get_developer_formset(extra_forms=1):
+    developer_formset = modelformset_factory(
+        model=Developer,
+        exclude=("invoice",),
+        widgets={
+            "id": forms.HiddenInput(
+                attrs={'class': 'form-control input-lg', 'placeholder': 'Id'}),
+            "name": forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Developer Name',
+                       'required': 'required'
+                       }),
+            "project": forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select Project',
+                'required': 'required'
+            }),
+            "project_type": forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select Project Type',
+                'required': 'required'
+            }),
+            "resource_type": forms.Select(
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select Resource Type',
+                       'required': 'required'}),
+            "phone_no": forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            "email_id": forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Email Id'})
+        }, extra=extra_forms)
+    return developer_formset
 
 
 def get_particular_formset(extra_forms=1):

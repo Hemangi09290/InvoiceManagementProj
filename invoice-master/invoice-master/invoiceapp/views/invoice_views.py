@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views.generic import FormView, CreateView, DetailView
 from invoiceapp.models import Invoice, Particular, Currency, Company, \
-    FixedBidParticular
+    FixedBidParticular, Project, Developer
 from invoiceapp.forms import InvoiceForm, get_particular_formset, CurrencyForm, \
     get_fixed_particular_formset
 
@@ -203,11 +203,15 @@ class InvoiceView(FormView, CreateView):
         sys_company = Company.objects.filter(name='systango').first()
         selected_companies = sys_company if sys_company else Company.objects.first()
         currency_form = CurrencyForm()
+        projects = Project.objects.all()
+        developers = Developer.objects.all()
         return render(request, 'invoice.html', {'form': form, "pform": pform,
                                                 'fixed_p_form': fixed_p_form,
                                                 "currency_form": currency_form,
                                                 "context": context,
                                                 "companies": companies,
+                                                "projects": projects,
+                                                "developers": developers,
                                                 "selected_companies": selected_companies})
 
     def post(self, request, *args, **kwargs):
