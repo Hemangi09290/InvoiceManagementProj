@@ -87,11 +87,94 @@
             border-radius: 0px;
         }
 
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+.select-list {
+  font-family: 'Open Sans', sans-serif;
+  color: #555;
+  background: #fff;
+}
+.select-list .title {
+  display: inline-block;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #eaeaec;
+  border-radius: 5px;
+  padding: 10px 15px 10px 15px;
+}
+.select-list .title::after {
+  display: inline-block;
+  content: '>';
+  margin-left: 15px;
+  font-size: 11px;
+  transform: rotate(90deg) scale(1, 2);
+}
+.select-list .title:hover {
+  background: #eaeaec;
+}
+.select-list .select-options {
+  margin-top: 5px;
+  display: none;
+  position: absolute;
+  z-index: 500;
+  border: 1px solid #eaeaec;
+  background: #fff;
+}
+.select-list .select-options .option label {
+  display: inline-block;
+  padding: 10px 30px 10px 10px;
+}
+.select-list .select-options .option:hover {
+  background: #eaeaec;
+}
+.select-list .select-options .option input {
+  margin: 10px 0 12px 15px;
+}
+
     </style>
     <script>
         $(function () {
             $("#id_agreement_date").datepicker();
+
+            $.fn.multiselect = function() {
+
+    var selector = this;
+    var options = $.extend({
+          onChange: function() {}
+      }, arguments[0] || {});
+
+    activate();
+
+    /////////
+
+    function activate() {
+
+      //events
+      $(selector).find('.title').on('click', function(e) {
+        $(this).parent().find('.select-options').toggle();
+      });
+
+      $(selector).find('input[type="checkbox"]').change(function(e){
+        options.onChange.call(this);
+      });
+
+    }
+  };
         });
+$(document).ready(function() {
+  $('.select-list').multiselect({
+    onChange: updateTable
+  });
+});
+
+function updateTable() {
+  var checkboxValue = $(this).val();
+  var isChecked = $(this).is(':checked');
+
+  alert(checkboxValue + ' is ' + isChecked)
+}
+
     </script>
     <form id="msform" method="POST" enctype="multipart/form-data" action="">
 
@@ -231,8 +314,6 @@
                                         <option>{{ project.name }}</option>
                                        {% endfor %}
                                    </select>
-
-
                                </div>
                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                    <label style=" font-style: monospace; opacity: 0.7;"> Select Project Type</label>
@@ -249,11 +330,17 @@
 
                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                      <label style=" font-style: monospace; opacity: 0.7;"> Select Developer </label>
-                                     <select name="developer_name" class="form-control" placeholder="Select developer " required="required" >
-                                       {% for developer in developers %}
-                                        <option>{{ developer.name }}</option>
-                                       {% endfor %}
-                                   </select>
+                                     <div class="select-list">
+                                              <div class="title">Select Developer</div>
+                                              <div class="select-options">
+                                                  {% for developer in developers %}
+                                                <div class="option">
+                                                    <input type="checkbox" name="vehicle" id="option1" value="" />
+                                                    <label for="option1">{{ developer.name }}</label>
+                                                </div>
+                                                  {% endfor %}
+                                              </div>
+                                     </div>
                                </div>
                            </div>
                        </div>
