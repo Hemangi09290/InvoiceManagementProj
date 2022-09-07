@@ -114,12 +114,16 @@ body {
   background: #eaeaec;
 }
 .select-list .select-options {
-  margin-top: 5px;
-  display: none;
-  position: absolute;
-  z-index: 500;
-  border: 1px solid #eaeaec;
-  background: #fff;
+    margin-top: 5px;
+    display: none;
+    position: absolute;
+    z-index: 500;
+    border: 1px solid #eaeaec;
+    background: #fff;
+    width: 160px;
+    height: 160px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 .select-list .select-options .option label {
   display: inline-block;
@@ -172,7 +176,6 @@ function updateTable() {
   var checkboxValue = $(this).val();
   var isChecked = $(this).is(':checked');
 
-  alert(checkboxValue + ' is ' + isChecked)
 }
 
     </script>
@@ -309,11 +312,7 @@ function updateTable() {
 
                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                     <label style=" font-style: monospace; opacity: 0.7;"> Select Project </label>
-                                    <select name="project_name" class="form-control" placeholder="Select project " required="required" >
-                                       {% for project in projects %}
-                                        <option>{{ project.name }}</option>
-                                       {% endfor %}
-                                   </select>
+                                    {{ form.project }}
                                </div>
                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                    <label style=" font-style: monospace; opacity: 0.7;"> Select Project Type</label>
@@ -327,20 +326,9 @@ function updateTable() {
 					<div class="card">
                        <div class="card-body">
 							<div class="row">
-
-                               <div class="form-group col-xl-4 col-md-4 col-lg-4">
-                                     <label style=" font-style: monospace; opacity: 0.7;"> Select Developer </label>
-                                     <div class="select-list">
-                                              <div class="title">Select Developer</div>
-                                              <div class="select-options">
-                                                  {% for developer in developers %}
-                                                <div class="option">
-                                                    <input type="checkbox" name="vehicle" id="option1" value="" />
-                                                    <label for="option1">{{ developer.name }}</label>
-                                                </div>
-                                                  {% endfor %}
-                                              </div>
-                                     </div>
+                                <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                   <label style=" font-style: monospace; opacity: 0.7;"> Select Developer</label>
+                                   {{ form.developer }}
                                </div>
                            </div>
                        </div>

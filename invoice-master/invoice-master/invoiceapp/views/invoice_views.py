@@ -7,7 +7,7 @@ from django.views.generic import FormView, CreateView, DetailView
 from invoiceapp.models import Invoice, Particular, Currency, Company, \
     FixedBidParticular, Project, Developer
 from invoiceapp.forms import InvoiceForm, get_particular_formset, CurrencyForm, \
-    get_fixed_particular_formset
+    get_fixed_particular_formset, get_particular_developer_formset
 
 from invoiceapp.utils import convert_to_words
 from .common import save_particular_formset, save_fixed_particular_formset
@@ -212,7 +212,8 @@ class InvoiceView(FormView, CreateView):
                                                 "companies": companies,
                                                 "projects": projects,
                                                 "developers": developers,
-                                                "selected_companies": selected_companies})
+                                                "selected_companies": selected_companies
+                                                })
 
     def post(self, request, *args, **kwargs):
 

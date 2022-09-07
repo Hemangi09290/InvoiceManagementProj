@@ -1,8 +1,8 @@
 from django import forms
 from invoiceapp.models import (Company, CompanyAdditionalInfo,
                                CompanyBankDetail, Client, Invoice, Particular,
-                               Address,
-                               Currency, FixedBidParticular, Developer)
+                               Address, Currency, FixedBidParticular, Developer,
+                               ParticularDeveloper, Project)
 from django.forms import modelformset_factory
 
 
@@ -135,7 +135,7 @@ class InvoiceForm(forms.ModelForm):
             'created_at', 'from_address_text', 'to_address_text',
             'company_name',
             'client_name', 'project_name',
-            'website', "phone_no", "project", "currency_name",
+            'website', "phone_no", "currency_name",
             "currency_symbol",
             "total_amount", "exchange_rate", "company_bank_acc_type_text",
             "company_bank_acc_text",
@@ -182,6 +182,20 @@ class InvoiceForm(forms.ModelForm):
                     'required': 'required',
                     "onchange": "show_hide_particulars_panel(this.id, \
                     this.value)"}
+            ),
+            "project": forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Select project',
+                    'required': 'required',
+                }
+            ),
+            "developer": forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Select developer',
+                    'required': 'required',
+                }
             ),
             "cgst": forms.NumberInput(
                 attrs={'class': 'form-control', 'onblur': 'calculate_totals();',
@@ -375,6 +389,31 @@ def get_particular_formset(extra_forms=1):
     return particulars_formset
 
 
+def get_particular_developer_formset(extra_forms=1):
+    particulars_developer_formset = modelformset_factory(
+        model=ParticularDeveloper,
+        exclude=("Developer",),
+        widgets={
+            "id": forms.HiddenInput(
+                attrs={'class': 'form-control input-lg', 'placeholder': 'Id'}),
+            "project": forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 'Quantity',
+                       'required': 'required'
+                       }),
+            "project_type": forms.NumberInput(attrs={
+                'class': 'form-control',
+                'onblur': 'calculate_total_amount(this.id, this.value);',
+                'placeholder': 'Enter Unit Rate',
+                'required': 'required'
+            }),
+            "developer": forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 'Total Amount',
+                       'required': 'required',
+                       'onblur': 'calculate_amount(this.id, this.value);'})
+        }, extra=extra_forms)
+    return particulars_developer_formset
+
+
 def get_address_formset(extra_forms=1, is_company=True):
     address_formset = modelformset_factory(
         model=Address, exclude=("company", "client"),
@@ -456,3 +495,37 @@ def get_fixed_particular_formset(extra_forms=1):
                        'required': 'required'})
         }, extra=extra_forms)
     return particulars_formset
+
+
+class DeveloperParticularForm(forms.Form):
+    project_set = Project.objects.all()
+    developer_set = Developer.objects.all()
+    PROJECT_TYPE = (
+        ('fixed price', 'Fixed Price'),
+        ('hourly', 'Hourly'),
+    )
+
+    project = forms.ModelChoiceField(
+        queryset=project_set,
+        empty_label="Projects", required=True,
+        widget=forms.Select(
+            attrs={'class': 'form-control',
+                   'placeholder': 'Select Project',
+            })
+    )
+    developer = forms.ModelChoiceField(
+        queryset=developer_set,
+        empty_label="developer", required=True,
+        widget=forms.Select(
+            attrs={'class': 'form-control',
+                   'placeholder': 'Select developer',
+                   })
+    )
+
+    project_type = forms.ChoiceField(
+        choices=PROJECT_TYPE,
+        widget=forms.Select(
+            attrs={'class': 'form-control',
+                   'placeholder': 'Select project_type',
+                   })
+    )

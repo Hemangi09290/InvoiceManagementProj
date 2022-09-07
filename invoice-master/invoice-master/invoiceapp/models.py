@@ -153,6 +153,20 @@ class Address(models.Model):
         return self.address
 
 
+class Developer(models.Model):
+    name = models.CharField(max_length=50)
+    phone_no = models.CharField(max_length=12, null=True, blank=True)
+    email_id = models.EmailField(max_length=50, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True,
+                                blank=True)
+    project_type = models.CharField(max_length=50, choices=PROJECT_TYPE,
+                                    default='hourly')
+    resource_type = models.ForeignKey(ResourceType, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
 class Invoice(models.Model):
     from_address = models.ForeignKey(Address, on_delete=models.CASCADE,
                                      related_name='company_address', null=True,
@@ -214,6 +228,7 @@ class Invoice(models.Model):
                                blank=True)
     igst = models.DecimalField(max_digits=8, decimal_places=2, null=True,
                                blank=True)
+    developer = models.ForeignKey(Developer, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.from_address_text if self.from_address_text else self.to_address_text
@@ -258,20 +273,6 @@ class FixedBidParticular(models.Model):
         total_amount = cls.objects.filter(invoice=invoice).aggregate(
             Sum("amount"))
         return total_hours.get("quantity__sum"), total_amount.get("amount__sum")
-
-
-class Developer(models.Model):
-    name = models.CharField(max_length=50)
-    phone_no = models.CharField(max_length=12, null=True, blank=True)
-    email_id = models.EmailField(max_length=50, null=True, blank=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True,
-                                blank=True)
-    project_type = models.CharField(max_length=50, choices=PROJECT_TYPE,
-                                    default='hourly')
-    resource_type = models.ForeignKey(ResourceType, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
 
 
 class ParticularDeveloper(models.Model):
