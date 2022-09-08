@@ -195,6 +195,7 @@ class InvoiceForm(forms.ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Select developer',
                     'required': 'required',
+                    'multiple': 'true'
                 }
             ),
             "cgst": forms.NumberInput(
