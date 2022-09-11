@@ -249,14 +249,23 @@ class InvoiceView(FormView, CreateView):
         currency_form = CurrencyForm(post_req)
 
         if form.is_valid() and pform.is_valid() and currency_form.is_valid():
-
             currency = currency_form.cleaned_data["currency"]
             form.cleaned_data["exchange_rate"] = currency_form.cleaned_data[
                 "exchange_rate"]
             form.cleaned_data["currency_name"] = currency.currency
             form.cleaned_data["currency_symbol"] = currency.symbol
             form.cleaned_data["total_amount"] = post_req.get("total_amount")
+
+            dev_obj = []
+            developer_ids = post_req.getlist('developer')
+            for dev in developer_ids:
+                obj = Developer.objects.filter(id=dev).first()
+                dev_obj.append(obj)
+            form.cleaned_data["developer"] = dev_obj
+
             invoice = form.save(cgst=cgst, sgst=sgst, igst=igst)
+            form.save_m2m()
+
 
             for f in pform:
                 attribute = f.save(commit=False)

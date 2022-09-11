@@ -228,7 +228,7 @@ class Invoice(models.Model):
                                blank=True)
     igst = models.DecimalField(max_digits=8, decimal_places=2, null=True,
                                blank=True)
-    developer = models.ForeignKey(Developer, on_delete=models.CASCADE, null=True)
+    developer = models.ManyToManyField(Developer, null=True, related_name='developer')
 
     def __str__(self):
         return self.from_address_text if self.from_address_text else self.to_address_text

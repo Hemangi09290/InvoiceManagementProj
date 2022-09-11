@@ -129,6 +129,7 @@ class CurrencyForm(forms.Form):
 
 
 class InvoiceForm(forms.ModelForm):
+    developer = forms.ModelMultipleChoiceField(queryset=Developer.objects.all())
     class Meta:
         model = Invoice
         exclude = (
@@ -188,14 +189,6 @@ class InvoiceForm(forms.ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Select project',
                     'required': 'required',
-                }
-            ),
-            "developer": forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Select developer',
-                    'required': 'required',
-                    'multiple': 'true'
                 }
             ),
             "cgst": forms.NumberInput(
