@@ -163,7 +163,16 @@ class InvoiceUpdateView(UpdateView):
             form.cleaned_data["currency_symbol"] = currency.symbol
             form.cleaned_data["total_amount"] = self.request.POST.get(
                 "total_amount")
+
+            dev_obj = []
+            developer_ids = self.request.POST.getlist('developer')
+            for dev in developer_ids:
+                obj = Developer.objects.filter(id=dev).first()
+                dev_obj.append(obj)
+            form.cleaned_data["developer"] = dev_obj
+
         invoice = form.save(cgst=cgst, sgst=sgst, igst=igst)
+        form.save_m2m()
 
         if post_req.get("project_type") == 'hourly':
             p_form = self.particulars_fmset(post_req)
@@ -265,7 +274,6 @@ class InvoiceView(FormView, CreateView):
 
             invoice = form.save(cgst=cgst, sgst=sgst, igst=igst)
             form.save_m2m()
-
 
             for f in pform:
                 attribute = f.save(commit=False)
