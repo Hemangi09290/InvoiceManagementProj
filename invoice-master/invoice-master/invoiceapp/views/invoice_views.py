@@ -214,6 +214,8 @@ class InvoiceView(FormView, CreateView):
         currency_form = CurrencyForm()
         projects = Project.objects.all()
         developers = Developer.objects.all()
+        sys_dev = Developer.objects.filter(name='Hemangi Backend Devs').first()
+        selected_devs = sys_dev if sys_dev else Developer.objects.first()
         return render(request, 'invoice.html', {'form': form, "pform": pform,
                                                 'fixed_p_form': fixed_p_form,
                                                 "currency_form": currency_form,
@@ -221,7 +223,8 @@ class InvoiceView(FormView, CreateView):
                                                 "companies": companies,
                                                 "projects": projects,
                                                 "developers": developers,
-                                                "selected_companies": selected_companies
+                                                "selected_companies": selected_companies,
+                                                "selected_devs":selected_devs
                                                 })
 
     def post(self, request, *args, **kwargs):
