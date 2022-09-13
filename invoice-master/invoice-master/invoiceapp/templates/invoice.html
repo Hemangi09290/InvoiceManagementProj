@@ -214,6 +214,10 @@
         display: none;
     }
 
+    .select2-container--default .select2-search--inline .select2-search__field{
+        width: 300px;
+    }
+
     </style>
     <script>
         $(function () {
@@ -393,16 +397,21 @@ function updateTable() {
                                     <label style=" font-style: monospace; opacity: 0.7;"> Select Project </label>
                                     {{ form.project }}
                                </div>
-                               <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                               <!-- <div class="form-group col-xl-4 col-md-4 col-lg-4">
                                    <label style=" font-style: monospace; opacity: 0.7;"> Select Project Type</label>
                                    {{ form.project_type }}
-                               </div>
+                               </div> -->
+                               <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                    <label style=" font-style: monospace; opacity: 0.7;"> Select Developer</label>
+                                    {{ form.developer }}
+                                </div>
+
 
 							</div>
 						</div>
 						</div>
 
-					<div class="card">
+					<!-- <div class="card">
                        <div class="card-body">
 							<div class="row">
                                 <div class="form-group col-xl-4 col-md-4 col-lg-4">
@@ -411,7 +420,7 @@ function updateTable() {
                                </div>
                            </div>
                        </div>
-                   </div>
+                   </div> -->
 
                     <a class="btn btn-secondary btn-rounded float-right mr-2" href="{% url 'invoice-list' %}" role="button">
                         Cancel
@@ -433,7 +442,7 @@ function updateTable() {
                                 {{ fixed_p_form.management_form }}
                                 <div class="row">
 
-                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group col-xl-3 col-md-3 col-lg-3">
                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Currency* </label>
                                         {{ currency_form.currency }}
                                         <span id="currency_sub_unit" hidden>{{ currency_sub_unit }}</span>
@@ -441,20 +450,26 @@ function updateTable() {
                                     </div>
 
 
-                                    <div class="form-group col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group col-xl-3 col-md-3 col-lg-3">
                                          <label style=" font-style: monospace; opacity: 0.7;"> Select Invoice Type* </label>
                                         {{ form.project_type }}
                                     </div>
-                                    <div id="div_exchange_rate" style="{% if currency_name == 'INR' %}display: none;{% endif %}" class="form-group col-xl-4 col-md-4 col-lg-4">
+                                    <div id="div_exchange_rate" style="{% if currency_name == 'INR' %}display: none;{% endif %}" class="form-group col-xl-3 col-md-3 col-lg-3">
                                          <label style=" font-style: monospace; opacity: 0.7;"> Enter Exchange Rate* </label>
                                         {{ currency_form.exchange_rate }}
                                     </div>
+
+                                    <div class="form-group col-xl-3 col-md-3 col-lg-3">
+                                        <label style=" font-style: monospace; opacity: 0.7;"> Select Project* </label>
+                                       {{ form.project }}
+                                   </div>
                                 </div>
 
                                 <table style="{% if form.project_type.value == 'hourly' or  form.project_type.value != 'fixed price' %}display:table;{% else %} display: none;{% endif %}" class="table table-bordered" id="project_table">
                                     <thead>
                                     <tr class="table_hd">
-                                        <th width="40%">Item / Particulars</th>
+                                        <th width="20%">Item / Particulars</th>
+                                        <th width="20%">Developer</th>
                                         <th width="20%">Unit rate</th>
                                         <th width="20%">Amount in (<span id="id_currency_type">{{ currency_name|default_if_none:"" }}</span>)</th>
                                         <th width="20%">QTY (hours)</th>
@@ -468,9 +483,22 @@ function updateTable() {
 
                                         <tr class="duplicate-row">
                                             <td>{{ particular.resource_type }} {{ particular.id }}</td>
+                                            <td>
+                                                {% if is_edit %}
+                                                    {{ form.developer }}
+                                                {% else %}
+                                                    <select id="id_developer" name="developer" class="form-control">
+                                                    {% for dev in form.developer %}
+                                                        <option value="{{dev.id}}" {% if dev == selected_devs %} selected="selected"{% endif %}>
+                                                            {{dev.name|capfirst}}
+                                                        </option>
+                                                    {% endfor %}
+                                                    </select>
+                                                {% endif %}
+                                            </td>
                                             <td>{{ particular.unit_rate }}</td>
                                             <td>{{ particular.amount }}</td>
-                                            <td>{{ particular.quantity }}</td>
+                                            <td style="margin-right: 5px;">{{ particular.quantity }}</td>
                                             <td>
                                                 {% if is_edit %}
                                                     <button class="btn btn-primary btn-rounded float-right remove-form-row"
@@ -1444,8 +1472,12 @@ function updateTable() {
 <script>
     $("#id_developer").select2({
 			closeOnSelect : false,
-			placeholder : "select developer",
+			placeholder : "Select Developer to Associate with Proj",
 			allowClear: true,
+            selectOnBlur: true,
 		});
+        $("#id_developer").trigger("change");
+
+       
 </script>
 {% endblock %}
