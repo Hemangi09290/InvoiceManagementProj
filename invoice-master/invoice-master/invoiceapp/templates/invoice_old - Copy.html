@@ -478,18 +478,19 @@ function updateTable() {
                                     </thead>
                                     <tbody>
 
+
                                     {% for particular in pform %}
 
                                         <tr class="duplicate-row">
                                             <td>{{ particular.resource_type }} {{ particular.id }}</td>
                                             <td>
-                                                   <select id="developers" name="developer_list" class="form-control">
-                                                    {% for dev in developers %}
+                                                <select id="id_developer" name="developer" class="form-control">
+                                                    {% for dev in form.developer %}
                                                         <option value="{{dev.id}}">
-                                                            {{dev.name|capfirst}}
+                                                            {{dev|capfirst}}
                                                         </option>
                                                     {% endfor %}
-                                                    </select>
+                                                </select>
                                             </td>
                                             <td>{{ particular.unit_rate }}</td>
                                             <td>{{ particular.amount }}</td>
@@ -1473,10 +1474,6 @@ function updateTable() {
 		});
         $("#id_developer").trigger("change");
 
-<<<<<<< HEAD
        
-=======
-
->>>>>>> 3c7c5e6b52e0ee933738b3a48d6a589755e3923e
 </script>
 {% endblock %}
