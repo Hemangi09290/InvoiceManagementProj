@@ -483,11 +483,13 @@ function updateTable() {
                                         <tr class="duplicate-row">
                                             <td>{{ particular.resource_type }} {{ particular.id }}</td>
                                             <td>
-                                                {% if is_edit %}
-                                                    {{ form.developer }}
-                                                {% else %}
-                                                   {{ form.developer }}
-                                                {% endif %}
+                                                   <select id="developers" name="developer_list" class="form-control">
+                                                    {% for dev in developers %}
+                                                        <option value="{{dev.id}}">
+                                                            {{dev.name|capfirst}}
+                                                        </option>
+                                                    {% endfor %}
+                                                    </select>
                                             </td>
                                             <td>{{ particular.unit_rate }}</td>
                                             <td>{{ particular.amount }}</td>

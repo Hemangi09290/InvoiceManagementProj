@@ -133,9 +133,11 @@ class InvoiceUpdateView(UpdateView):
             context["pform"] = self.particulars_formset_extra(
                 queryset=Particular.objects.none())
         context["is_edit"] = True
+        developers = Developer.objects.all()
+        context["developers"] = developers
 
         currency_form = CurrencyForm(initial={'currency': currency_qs,
-                                              'exchange_rate': invoice.exchange_rate}, )
+                                              'exchange_rate': invoice.exchange_rate},)
         context["currency_form"] = currency_form
         context["currency_name"] = invoice.currency_name
         context["currency_sub_unit"] = currency_qs.sub_unit
