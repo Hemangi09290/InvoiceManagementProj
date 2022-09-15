@@ -240,7 +240,8 @@ class Particular(models.Model):
     quantity = models.DecimalField(max_digits=8, decimal_places=2)
     unit_rate = models.DecimalField(max_digits=8, decimal_places=2)
     amount = models.DecimalField(max_digits=13, decimal_places=2)
-
+    developer = models.ForeignKey(Developer, on_delete=models.CASCADE, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.resource_type.resource_type_name
 
@@ -262,6 +263,9 @@ class FixedBidParticular(models.Model):
     project_particulars_name = models.CharField(max_length=50)
     quantity = models.IntegerField()
     amount = models.DecimalField(max_digits=13, decimal_places=2)
+    resource_type = models.ForeignKey(ResourceType, on_delete=models.CASCADE, blank=True, null=True)
+    developer = models.ForeignKey(Developer, on_delete=models.CASCADE, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.project_particulars_name

@@ -198,10 +198,15 @@ class InvoiceUpdateView(UpdateView):
 class InvoiceView(FormView, CreateView):
     particulars_formset = get_particular_formset(extra_forms=1)
     fixed_particular_formset = get_fixed_particular_formset(extra_forms=1)
-
+    print("====================================")
+    print(particulars_formset)
+    print("==============================")
     def get(self, request, *args, **kwargs):
         form = InvoiceForm()
         pform = self.particulars_formset(queryset=Particular.objects.none())
+        print("***********************************")
+        print(pform)
+        print("*******************************")
         fixed_p_form = self.fixed_particular_formset(
             queryset=FixedBidParticular.objects.none(), prefix='fixed_p')
         context = {
@@ -238,12 +243,18 @@ class InvoiceView(FormView, CreateView):
             sgst = post_req.get("sgst")
             igst = post_req.get("igst")
             resource_type_values = post_req.getlist("form-0-resource_type")
-
+            print("++++++++++++++++++++++++++++++++++++")
+            #resource_type_values gives id as '1' 
+            print(resource_type_values) 
+            print("++++++++++++++++++++++++")
             idx = 0
             for value in resource_type_values:
                 post_req["form-{0}-resource_type".format(idx)] = value
                 idx += 1
             pform = self.particulars_formset(post_req)
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            print(pform)
+            print("@@@@@@@@@@@@@@@@@@@@@@")
         else:
             cgst = post_req.get("fixed_cgst")
             sgst = post_req.get("fixed_sgst")
