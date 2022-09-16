@@ -15,6 +15,10 @@ $(document).ready(function() {
 
       for (i = 0; i < total_forms; i++) {
           let unit_rate_val = "", resource = "";
+          //TO Do
+          //check is it working if not then mention
+          //if condition as :
+          //if (prefix === "fixed_p_form") then do project_particulars_name stuff and unit_rate_val="" else otherwisse
           if (prefix === "form") {
                resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
                unit_rate_val = $("#id_" + prefix + "-" + i.toString() + "-unit_rate").val();

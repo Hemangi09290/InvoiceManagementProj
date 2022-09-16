@@ -133,8 +133,6 @@ class InvoiceUpdateView(UpdateView):
             context["pform"] = self.particulars_formset_extra(
                 queryset=Particular.objects.none())
         context["is_edit"] = True
-        developers = Developer.objects.all()
-        context["developers"] = developers
 
         currency_form = CurrencyForm(initial={'currency': currency_qs,
                                               'exchange_rate': invoice.exchange_rate},)
@@ -165,13 +163,6 @@ class InvoiceUpdateView(UpdateView):
             form.cleaned_data["currency_symbol"] = currency.symbol
             form.cleaned_data["total_amount"] = self.request.POST.get(
                 "total_amount")
-
-            dev_obj = []
-            developer_ids = self.request.POST.getlist('developer')
-            for dev in developer_ids:
-                obj = Developer.objects.filter(id=dev).first()
-                dev_obj.append(obj)
-            form.cleaned_data["developer"] = dev_obj
 
         invoice = form.save(cgst=cgst, sgst=sgst, igst=igst)
         form.save_m2m()
@@ -214,18 +205,14 @@ class InvoiceView(FormView, CreateView):
         selected_companies = sys_company if sys_company else Company.objects.first()
         currency_form = CurrencyForm()
         projects = Project.objects.all()
-        developers = Developer.objects.all()
-        sys_dev = Developer.objects.filter(name='Hemangi Backend Devs').first()
-        selected_devs = sys_dev if sys_dev else Developer.objects.first()
         return render(request, 'invoice.html', {'form': form, "pform": pform,
                                                 'fixed_p_form': fixed_p_form,
                                                 "currency_form": currency_form,
                                                 "context": context,
                                                 "companies": companies,
                                                 "projects": projects,
-                                                "developers": developers,
-                                                "selected_companies": selected_companies,
-                                                "selected_devs":selected_devs
+                                                "selected_companies": selected_companies
+                                                
                                                 })
 
     def post(self, request, *args, **kwargs):
@@ -241,6 +228,11 @@ class InvoiceView(FormView, CreateView):
             for value in resource_type_values:
                 post_req["form-{0}-resource_type".format(idx)] = value
                 idx += 1
+            developer_values = post_req.getlist("form-0-developer")
+            devx = 0
+            for value in developer_values:
+                post_req["form-{0}-developer".format(devx)] = value
+                devx += 1
             pform = self.particulars_formset(post_req)
         else:
             cgst = post_req.get("fixed_cgst")
@@ -254,6 +246,16 @@ class InvoiceView(FormView, CreateView):
                 post_req["fixed_p-{0}-project_particulars_name".format(
                     idx)] = value
                 idx += 1
+            resource_type_values = post_req.getlist("fixed_p-0-resource_type")
+            dx = 0
+            for value in resource_type_values:
+                post_req["fixed_p-{0}-resource_type".format(dx)] = value
+                dx += 1
+            developer_values = post_req.getlist("fixed_p-0-developer")
+            devx = 0
+            for value in developer_values:
+                post_req["fixed_p-{0}-developer".format(devx)] = value
+                devx += 1
             pform = self.fixed_particular_formset(post_req,
                                                   prefix='fixed_p')
         form = InvoiceForm(post_req)
@@ -268,12 +270,6 @@ class InvoiceView(FormView, CreateView):
             form.cleaned_data["currency_symbol"] = currency.symbol
             form.cleaned_data["total_amount"] = post_req.get("total_amount")
 
-            dev_obj = []
-            developer_ids = post_req.getlist('developer')
-            for dev in developer_ids:
-                obj = Developer.objects.filter(id=dev).first()
-                dev_obj.append(obj)
-            form.cleaned_data["developer"] = dev_obj
 
             invoice = form.save(cgst=cgst, sgst=sgst, igst=igst)
             form.save_m2m()
@@ -306,6 +302,7 @@ class InvoiceDetailView(DetailView):
         # add extra field
         invoice = self.get_object()
         resources, qty, unit_rate, amounts = '', '', '', ''
+        developers = ''
         currency_qs = Currency.objects.filter(
             currency=invoice.currency_name, symbol=invoice.currency_symbol
         ).first()
@@ -361,6 +358,8 @@ class InvoiceDetailView(DetailView):
             for particular in particulars:
                 resources += str(
                     particular.resource_type.resource_type_name) + "<br>"
+                developers += str(
+                    particular.developer.name) + "<br>"
                 qty += str(particular.quantity) + "<br>"
                 unit_rate += str(particular.unit_rate) + "<br>"
                 amounts += str(particular.amount) + "<br>"
@@ -411,7 +410,8 @@ class InvoiceDetailView(DetailView):
             particulars = FixedBidParticular.objects.filter(invoice=invoice)
 
             for particular in particulars:
-                resources += str(particular.project_particulars_name) + "<br>"
+                resources += str(particular.resource_type.resource_type_name) + "<br>"
+                developers += str(particular.developer.name) + "<br>"
                 qty += str(particular.quantity) + "<br>"
                 amounts += str(particular.amount) + "<br>"
         context["context_bottom"] = context_bottom
@@ -429,6 +429,7 @@ class InvoiceDetailView(DetailView):
 
         context['particulars'] = {
             'resource_types': resources,
+            'developers': developers,
             'qty': qty,
             'amounts': amounts,
             'unit_rates': unit_rate

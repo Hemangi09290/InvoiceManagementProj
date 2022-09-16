@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from invoiceapp.models import (Address, BankAccountType, CompanyBankDetail, Company, Client, Currency,
-                               CompanyAdditionalInfo, Particular, ResourceType, FixedBidParticular)
+                               CompanyAdditionalInfo, Developer, Particular, ResourceType, FixedBidParticular)
 
 
 def save_address_new_formset(total_forms, data, company=None, client=None, prefix='address'):
@@ -198,6 +198,7 @@ def save_particular_formset(total_forms, data, invoice=None, prefix='form'):
         if data.get(id_address) == '' or not data.get(id_address):
 
             resource_type = data.get('{0}-{1}-resource_type'.format(prefix, i), '')
+            developer = data.get('{0}-{1}-developer'.format(prefix, i), '')
             quantity = data.get('{0}-{1}-quantity'.format(prefix, i), '')
             unit_rate = data.get('{0}-{1}-unit_rate'.format(prefix, i), '')
             amount = data.get('{0}-{1}-amount'.format(prefix, i), '')
@@ -205,6 +206,7 @@ def save_particular_formset(total_forms, data, invoice=None, prefix='form'):
             try:
                 data.pop(id_address)
                 data.pop('{0}-{1}-resource_type'.format(prefix, i), '')
+                data.pop('{0}-{1}-developer'.format(prefix, i), '')
                 data.pop('{0}-{1}-quantity'.format(prefix, i), '')
                 data.pop('{0}-{1}-unit_rate'.format(prefix, i), '')
                 data.pop('{0}-{1}-amount'.format(prefix, i), '')
@@ -215,7 +217,11 @@ def save_particular_formset(total_forms, data, invoice=None, prefix='form'):
                 resource = ResourceType.objects.get(pk=resource_type)
             else:
                 return
-            particular = Particular(resource_type=resource, quantity=quantity, unit_rate=unit_rate,
+            if developer:
+                dev = Developer.objects.get(pk=developer)
+            else:
+                return
+            particular = Particular(resource_type=resource, developer=dev, quantity=quantity, unit_rate=unit_rate,
                                     amount=amount, invoice=invoice)
 
             particular.save()
@@ -229,19 +235,31 @@ def save_fixed_particular_formset(total_forms, data, invoice=None, prefix='fixed
         if data.get(id_address) == '' or not data.get(id_address):
 
             project_particulars_name = data.get('{0}-{1}-project_particulars_name'.format(prefix, i), '')
+            resource_type = data.get('{0}-{1}-resource_type'.format(prefix, i), '')
+            developer = data.get('{0}-{1}-developer'.format(prefix, i), '')
             quantity = data.get('{0}-{1}-quantity'.format(prefix, i), '')
             amount = data.get('{0}-{1}-amount'.format(prefix, i), '')
 
             try:
-                data.pop(id_address)
+                data.pop(id_address)                
+                data.pop('{0}-{1}-project_particulars_name'.format(prefix, i), '')
                 data.pop('{0}-{1}-resource_type'.format(prefix, i), '')
+                data.pop('{0}-{1}-developer'.format(prefix, i), '')
                 data.pop('{0}-{1}-quantity'.format(prefix, i), '')
                 data.pop('{0}-{1}-amount'.format(prefix, i), '')
 
             except KeyError as e:
                 pass
 
-            particular = FixedBidParticular(project_particulars_name=project_particulars_name, quantity=quantity,
+            if resource_type:
+                resource = ResourceType.objects.get(pk=resource_type)
+            else:
+                return
+            if developer:
+                dev = Developer.objects.get(pk=developer)
+            else:
+                return
+            particular = FixedBidParticular(resource_type=resource, developer=dev, quantity=quantity,
                                             amount=amount, invoice=invoice)
 
             particular.save()
