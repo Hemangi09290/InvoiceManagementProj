@@ -19,7 +19,6 @@ class InvoiceUpdateView(UpdateView):
     form_class = InvoiceForm
     particulars_fmset = get_particular_formset(extra_forms=0)
     fixed_particular_formset = get_fixed_particular_formset(extra_forms=0)
-
     particulars_formset_extra = get_particular_formset(extra_forms=1)
     fixed_particular_formset_extra = get_fixed_particular_formset(extra_forms=1)
 
@@ -259,7 +258,6 @@ class InvoiceView(FormView, CreateView):
         form = InvoiceForm(post_req)
 
         currency_form = CurrencyForm(post_req)
-
         if form.is_valid() and pform.is_valid() and currency_form.is_valid():
             currency = currency_form.cleaned_data["currency"]
             form.cleaned_data["exchange_rate"] = currency_form.cleaned_data[
