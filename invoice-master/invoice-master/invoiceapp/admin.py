@@ -47,7 +47,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @admin.register(Particular)
 class ParticularAdmin(admin.ModelAdmin):
-    list_display = ["invoice", "resource_type", "quantity", "unit_rate", "amount"]
+    list_display = ["invoice", "resource_type", "quantity", "unit_rate", "amount","developer","project"]
 
 
 @admin.register(BankAccountType)
@@ -72,7 +72,7 @@ class ResourceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(FixedBidParticular)
 class FixedParticularAdmin(admin.ModelAdmin):
-    list_display = ["project_particulars_name", "invoice", "quantity", "amount"]
+    list_display = ["project_particulars_name", "invoice", "quantity", "amount","resource_type","developer","project"]
 
 
 @admin.register(Developer)

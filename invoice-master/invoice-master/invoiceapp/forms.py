@@ -378,7 +378,16 @@ def get_particular_formset(extra_forms=1):
             "amount": forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 'Total Amount',
                        'required': 'required',
-                       'onblur': 'calculate_amount(this.id, this.value);'})
+                       'onblur': 'calculate_amount(this.id, this.value);'}),
+            "developer": forms.Select(
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select Developer',
+                       'required': 'required'}),
+            "project": forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select Project',
+                'required': 'required'
+            })
         }, extra=extra_forms)
     return particulars_formset
 
@@ -482,11 +491,24 @@ def get_fixed_particular_formset(extra_forms=1):
                 }),
             "project_particulars_name": forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'Enter project',
-                       'required': 'required'}),
+                       'required': False}),
             "amount": forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 'Total Amount',
                        'onblur': 'calculate_fixed_amount(this.id, this.value);',
-                       'required': 'required'})
+                       'required': 'required'}),
+            "resource_type": forms.Select(
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select Resource Type',
+                       'required': 'required'}),
+            "developer": forms.Select(
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select Developer',
+                       'required': 'required'}),
+            "project": forms.Select(attrs={
+                'class': 'form-control',
+                'placeholder': 'Select Project',
+                'required': 'required'
+            })
         }, extra=extra_forms)
     return particulars_formset
 

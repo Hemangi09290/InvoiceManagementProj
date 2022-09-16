@@ -260,7 +260,7 @@ class Particular(models.Model):
 
 class FixedBidParticular(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    project_particulars_name = models.CharField(max_length=50)
+    project_particulars_name = models.CharField(max_length=50, blank=True, null=True)
     quantity = models.IntegerField()
     amount = models.DecimalField(max_digits=13, decimal_places=2)
     resource_type = models.ForeignKey(ResourceType, on_delete=models.CASCADE, blank=True, null=True)
@@ -268,7 +268,7 @@ class FixedBidParticular(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return self.project_particulars_name
+        return self.resource_type.resource_type_name
 
     @classmethod
     def get_sum_of_column(cls, invoice):

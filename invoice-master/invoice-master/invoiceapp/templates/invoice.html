@@ -482,14 +482,7 @@ function updateTable() {
 
                                         <tr class="duplicate-row">
                                             <td>{{ particular.resource_type }} {{ particular.id }}</td>
-                                            <td>
-                                                   <select id="developers" name="developer_list" class="form-control">
-                                                    {% for dev in developers %}
-                                                        <option value="{{dev.id}}">
-                                                            {{dev.name|capfirst}}
-                                                        </option>
-                                                    {% endfor %}
-                                                    </select>
+                                            <td>{{ particular.developer }} {{ particular.id }}
                                             </td>
                                             <td>{{ particular.unit_rate }}</td>
                                             <td>{{ particular.amount }}</td>
@@ -552,7 +545,8 @@ function updateTable() {
                                 <table style="{% if form.project_type.value == 'fixed price' %}display:block;{% else %} display: none;{% endif %}" class="table table-bordered" id="project_table_fixed">
                                     <thead>
                                     <tr class="table_hd">
-                                        <th width="40%">Particulars</th>
+                                        <th width="20%">Particulars</th>
+                                        <th width="20%">Developer</th>
                                         <th width="20%">QTY as per Project Work</th>
                                         <th width="20%">Unit rate</th>
                                         <th width="20%">Amount in (<span id="id_fixed_currency_type">{{ currency_name|default_if_none:"" }}</span>)</th>
@@ -565,7 +559,8 @@ function updateTable() {
                                     {% for particular in fixed_p_form %}
 
                                         <tr class="fixed-duplicate-row">
-                                            <td>{{ particular.project_particulars_name }} {{ particular.id }}</td>
+                                            <td>{{ particular.resource_type }} {{ particular.id }}</td>
+                                            <td>{{ particular.developer }} {{ particular.id }}</td>
                                             <td>{{ particular.quantity }}</td>
                                             <td>-</td>
                                             <td>{{ particular.amount }}</td>

@@ -279,7 +279,7 @@ def ReportListView(request):
 
                 for particular in particulars:
                     resources += str(
-                        particular.project_particulars_name) + "<br>"
+                        particular.resource_type.resource_type_name) + "<br>"
                     qty += str(particular.quantity) + "<br>"
                     amounts += str(particular.amount) + "<br>"
 

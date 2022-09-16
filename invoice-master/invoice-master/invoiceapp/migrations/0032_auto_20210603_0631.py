@@ -3,6 +3,8 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
+from invoiceapp.models import ResourceType
+
 
 class Migration(migrations.Migration):
 
