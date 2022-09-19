@@ -280,13 +280,14 @@ function preview_invoice_temp2() {
         text_currency = check_empty_value(text_currency);
         $("#invoice_exchange_rate").text("Per "+text_currency+" @ Rs. "+ exchange_rate);
     }
-    $(".temp2 #id_invoice_p_qty_temp2").html(check_empty_value(particulars.quantities));
-    $(".temp2 #id_invoice_p_rate_temp2").html(check_empty_value(particulars.unit_rates));
-    $(".temp2 #id_invoice_p_amount_temp2").html(check_empty_value(particulars.amounts));
-    $(".temp2 #id_invoice_p_amount_temp2").html(check_empty_value(particulars.amounts));
-    $(".temp2 #invoice_total_amount_temp2").html(check_empty_value(particulars.amounts));
-    $(".temp2 #id_invoice_p_items_temp2").html(check_empty_value(particulars.resources));
-
+    $(".temp2 #id_invoice_p_qty").html(check_empty_value(particulars.quantities));
+    $(".temp2 #id_invoice_p_rate").html(check_empty_value(particulars.unit_rates));
+    $(".temp2 #id_invoice_p_amount").html(check_empty_value(particulars.amounts));
+    $(".temp2 #invoice_total_amount").html(check_empty_value(particulars.amounts));
+    $(".temp2 #id_invoice_p_items").html(check_empty_value(particulars.resources));
+    $(".temp2 #id_developer_name").html(check_empty_value(particulars.developer));
+    console.log("test");
+    console.log(particulars.developer);
 }
 
 
