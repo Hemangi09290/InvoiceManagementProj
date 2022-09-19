@@ -251,6 +251,7 @@ function preview_invoice_temp2() {
             $(".temp2 #id_invoice_bank_name_temp2").text(response_json.bank_name);
             $(".temp2 #id_invoice_bank_addr_temp2").text(response_json.bank_address);
             $(".temp2 #id_invoice_bank_acc_temp2").text(response_json.company_bank_acc);
+            $(".temp2 #id_invoice_project").html(response_json.project_name);
         },
     });
 
