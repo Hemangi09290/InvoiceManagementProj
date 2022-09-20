@@ -200,7 +200,7 @@ class InvoiceView(FormView, CreateView):
             "amount_in_words": "zero only"
         }
         companies = Company.objects.all()
-        sys_company = Company.objects.filter(name='systango').first()
+        sys_company = Company.objects.filter(name='Digitrix Software LLP').first()
         selected_companies = sys_company if sys_company else Company.objects.first()
         currency_form = CurrencyForm()
         projects = Project.objects.all()

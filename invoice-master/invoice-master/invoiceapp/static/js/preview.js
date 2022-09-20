@@ -287,8 +287,6 @@ function preview_invoice_temp2() {
     $(".temp2 #invoice_total_amount").html(check_empty_value(particulars.amounts));
     $(".temp2 #id_invoice_p_items").html(check_empty_value(particulars.resources));
     $(".temp2 #id_developer_name").html(check_empty_value(particulars.developer));
-    console.log("test");
-    console.log(particulars.developer);
 }
 
 
