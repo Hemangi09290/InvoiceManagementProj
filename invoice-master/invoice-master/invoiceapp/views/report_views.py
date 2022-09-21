@@ -181,6 +181,7 @@ def ReportListView(request):
 
             cgst_amount, sgst_amount, igst_amount = 0, 0, 0
             resources, qty, unit_rate, amounts = '', '', '', ''
+            developers = ''
             if report.project_type == 'hourly':
                 total_hours, total_unit_rate, total_amount = Particular.get_sum_of_column(
                     invoice=invoice)
@@ -230,6 +231,8 @@ def ReportListView(request):
                 for particular in particulars:
                     resources += str(
                         particular.resource_type.resource_type_name) + "<br>"
+                    developers += str(
+                        particular.developer.name) + "<br>"
                     qty += str(particular.quantity) + "<br>"
                     unit_rate += str(particular.unit_rate) + "<br>"
                     amounts += str(particular.amount) + "<br>"
@@ -244,7 +247,7 @@ def ReportListView(request):
                     cgst_amount = round(
                         (total_amount if total_amount else 0) * (
                             invoice.cgst if invoice.cgst else 0) / 100,
-                        2)
+                        2),
                     sgst_amount = round(
                         (total_amount if total_amount else 0) * (
                             invoice.sgst if invoice.sgst else 0) / 100,
@@ -280,6 +283,8 @@ def ReportListView(request):
                 for particular in particulars:
                     resources += str(
                         particular.resource_type.resource_type_name) + "<br>"
+                    developers += str(
+                        particular.developer.name) + "<br>"
                     qty += str(particular.quantity) + "<br>"
                     amounts += str(particular.amount) + "<br>"
 
@@ -300,6 +305,7 @@ def ReportListView(request):
 
             particulars = {
                 'resource_types': resources,
+                'developers': developers,
                 'qty': qty,
                 'amounts': amounts,
                 'unit_rates': unit_rate

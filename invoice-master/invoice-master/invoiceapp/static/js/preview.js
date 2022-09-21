@@ -11,19 +11,22 @@ $(document).ready(function() {
       let total_forms = $("#id_"+prefix+"-TOTAL_FORMS").val();
       console.log(total_forms);
       var i;
-      let resources = "", quantities = "<br>", unit_rates = "<br>", amounts = "<br>";
+      let resources = "", developers = "", quantities = "<br>", unit_rates = "<br>", amounts = "<br>";
 
       for (i = 0; i < total_forms; i++) {
-          let unit_rate_val = "", resource = "";
+          let unit_rate_val = "", resource = "", dev = "";
           //TO Do
           //check is it working if not then mention
           //if condition as :
           //if (prefix === "fixed_p_form") then do project_particulars_name stuff and unit_rate_val="" else otherwisse
           if (prefix === "form") {
                resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
+               dev = $("#id_" + prefix + "-" + i.toString() + "-developer :selected").text();
                unit_rate_val = $("#id_" + prefix + "-" + i.toString() + "-unit_rate").val();
           }else{
-              resource = $("#id_" + prefix + "-" + i.toString() + "-project_particulars_name").val();
+              //resource = $("#id_" + prefix + "-" + i.toString() + "-project_particulars_name").val();
+              resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
+              dev = $("#id_" + prefix + "-" + i.toString() + "-developer :selected").text();
               unit_rate_val = "";
           }
           let quantity = $("#id_"+prefix+"-" + i.toString() + "-quantity").val();
@@ -33,9 +36,10 @@ $(document).ready(function() {
           unit_rates = unit_rates + "<br>" + unit_rate_val;
           amounts = amounts + "<br>" + amount;
           resources = resources + "<br>" + resource;
+          developers = developers + "<br>" + dev;
       }
       return {
-          quantities, amounts, unit_rates, resources
+          quantities, amounts, unit_rates, resources, developers
       }
   }
 
@@ -44,15 +48,18 @@ $(document).ready(function() {
       let total_forms = $("#id_"+prefix+"-TOTAL_FORMS").val();
       console.log(total_forms);
       var i;
-      let resources = "", quantities = "", unit_rates = "", amounts = "";
+      let resources = "", developers = "", quantities = "", unit_rates = "", amounts = "";
 
       for (i = 0; i < total_forms; i++) {
-          let unit_rate_val = "", resource = "";
+          let unit_rate_val = "", resource = "", dev = "";
           if (prefix === "form") {
                resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
+               dev = $("#id_" + prefix + "-" + i.toString() + "-developer :selected").text();
                unit_rate_val = $("#id_" + prefix + "-" + i.toString() + "-unit_rate").val();
           }else{
-              resource = $("#id_" + prefix + "-" + i.toString() + "-project_particulars_name").val();
+              //resource = $("#id_" + prefix + "-" + i.toString() + "-project_particulars_name").val();
+              resource = $("#id_" + prefix + "-" + i.toString() + "-resource_type :selected").text();
+              dev = $("#id_" + prefix + "-" + i.toString() + "-developer :selected").text();
               unit_rate_val = "";
           }
           let quantity = $("#id_"+prefix+"-" + i.toString() + "-quantity").val();
@@ -62,9 +69,10 @@ $(document).ready(function() {
           unit_rates = unit_rates + unit_rate_val;
           amounts = amounts + amount;
           resources = resources + resource;
+          developers = developers + dev;
       }
       return {
-          quantities, amounts, unit_rates, resources
+          quantities, amounts, unit_rates, resources, developers
       }
   }
 
@@ -178,6 +186,7 @@ function preview_invoice() {
     $("#id_invoice_p_rate").html(check_empty_value(particulars.unit_rates));
     $("#id_invoice_p_amount").html(check_empty_value(particulars.amounts));
     $("#id_invoice_p_items").html(check_empty_value(particulars.resources));
+    $("#id_developer_name").html(check_empty_value(particulars.developers));
 
 }
 
@@ -286,7 +295,7 @@ function preview_invoice_temp2() {
     $(".temp2 #id_invoice_p_amount").html(check_empty_value(particulars.amounts));
     $(".temp2 #invoice_total_amount").html(check_empty_value(particulars.amounts));
     $(".temp2 #id_invoice_p_items").html(check_empty_value(particulars.resources));
-    $(".temp2 #id_developer_name").html(check_empty_value(particulars.developer));
+    $(".temp2 #id_developer_name").html(check_empty_value(particulars.developers));
 }
 
 
