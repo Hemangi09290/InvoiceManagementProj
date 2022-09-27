@@ -270,6 +270,7 @@ function preview_invoice_temp2() {
     $(".temp2 #invoice_currency_inr_temp2").text(check_empty_value(total_inr));
 
     let particulars = get_particulars_temp2(check_empty_value(prefix));
+    
     if (text_currency==="INR"){
             if(cgst_val && cgst_val != 0){
                 particulars.amounts = particulars.amounts+"<br>"+cgst_amt.toFixed(2);
@@ -290,6 +291,7 @@ function preview_invoice_temp2() {
         text_currency = check_empty_value(text_currency);
         $("#invoice_exchange_rate").text("Per "+text_currency+" @ Rs. "+ exchange_rate);
     }
+    alert(particulars.resources);
     $(".temp2 #id_invoice_p_qty").html(check_empty_value(particulars.quantities));
     $(".temp2 #id_invoice_p_rate").html(check_empty_value(particulars.unit_rates));
     $(".temp2 #id_invoice_p_amount").html(check_empty_value(particulars.amounts));
